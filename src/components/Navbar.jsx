@@ -92,13 +92,10 @@ const Navbar = ({ scrollToFooter }) => {
             Blog
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <button 
-            onClick={scrollToFooter}
-            className="contact hover:text-[#be0b32] transition-colors duration-300 group relative"
-          >
+          <Link to="/contact" onClick={() => setMenuOpen(false)} className="contact hover:text-[#be0b32] transition-colors duration-300 group relative">
             Contact Us
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
-          </button>
+          </Link>
         </div>
         
         <div className="hidden sm:flex gap-4 items-center call">
@@ -125,7 +122,7 @@ const Navbar = ({ scrollToFooter }) => {
           <h4 onClick={() => { setMenuOpen(false); navigate('/about'); }}>About Us</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/services'); }}>Services</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/blog'); }}>Blog</h4>
-          <h4 onClick={handleContactClick}>Contact Us</h4>
+          <h4 onClick={() => { setMenuOpen(false); navigate('/contact'); }}>Contact Us</h4>
           <Link to="/login" className='link' onClick={() => setMenuOpen(false)}>Login</Link>
         </div>
       )}

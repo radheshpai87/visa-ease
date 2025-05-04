@@ -47,7 +47,7 @@ const Services = () => {
       
 
   return (
-    <div className="bg-[#f6f8fc] w-full px-6 py-16">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 pt-28 relative z-50" data-scroll data-scroll-section>
       {/* Header Section */}
       <div className="text-center mb-16">
         <h2 className="text-[#be0b32] font-extrabold tracking-wide uppercase text-4xl mb-2">

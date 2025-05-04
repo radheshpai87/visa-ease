@@ -8,6 +8,7 @@ import Center from './components/Center';
 import Level from './components/Level';
 import Footer from './components/Footer';
 import MarqueeBanner from './components/MarqueeBanner';
+import Contact from './components/Contact';
 
 import Login from './components/Login';
 
@@ -102,20 +103,24 @@ const App = () => {
       } />
       
       <Route path="/about" element={
-        <div>
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
           <About />
           <Footer ref={footerRef} />
         </div>
       } />
       
       <Route path="/services" element={
-        <div>
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
           <Services />
+          <Footer ref={footerRef} />
         </div>
       } />
       
       <Route path="/blog" element={
-        <div>
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
           <Blog />
           <Footer ref={footerRef} />
         </div>
@@ -129,6 +134,14 @@ const App = () => {
       <Route path="/check-visa" element={
         <div >
           <CheckVisa />
+        </div>
+      } />
+      
+      <Route path="/contact" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <Contact />
+          <Footer ref={footerRef} />
         </div>
       } />
     </Routes>
