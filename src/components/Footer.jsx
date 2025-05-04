@@ -50,14 +50,100 @@ const EmailIcon = () => (
   </svg>
 );
 
-const Footer = ((props, ref) => {
+const Footer = forwardRef((props, ref) => {
   return (
     <footer 
-    ref={ref} 
-    id="contact-section"
-    className="w-full bg-blue-900 text-white py-12 px-8 relative overflow-hidden"
-    data-scroll-section
-  >  
+      ref={ref} 
+      id="contact-section"
+      className="w-full bg-blue-900 text-white py-12 px-8 relative overflow-hidden"
+      data-scroll-section
+    >  
+      {/* Background dot pattern */}
+      <div className="absolute inset-0" 
+        style={{
+          backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+          backgroundSize: '30px 30px',
+          opacity: 0.15
+        }}
+      />
+
+      {/* Enhanced background elements */}
+      <div className="absolute top-[10%] left-[5%]">
+        <svg className="w-32 h-32" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="45" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+          <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+        </svg>
+      </div>
+
+      {/* Additional small circles in top-left */}
+      <div className="absolute top-[25%] left-[12%]">
+        <svg className="w-16 h-16" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+        </svg>
+      </div>
+
+      <div className="absolute top-[20%] right-[8%]">
+        <svg className="w-24 h-24" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+        </svg>
+      </div>
+
+      {/* Additional circles on right */}
+      <div className="absolute top-[35%] right-[20%]">
+        <svg className="w-20 h-20" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+          <circle cx="50" cy="50" r="25" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+        </svg>
+      </div>
+
+      {/* New center-bottom circles */}
+      <div className="absolute bottom-[10%] left-[45%] -translate-x-1/2">
+        <svg className="w-40 h-40" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+          <circle cx="50" cy="50" r="38" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+        </svg>
+      </div>
+
+      {/* Additional small circles near center */}
+      <div className="absolute top-[45%] left-[30%]">
+        <svg className="w-16 h-16" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+        </svg>
+      </div>
+
+      {/* Floating planes */}
+      <div className="absolute bottom-[15%] left-[15%]">
+        <div className="opacity-10 rotate-45">
+          <PlaneIcon />
+        </div>
+      </div>
+
+      <div className="absolute top-[40%] right-[15%]">
+        <div className="opacity-10 -rotate-45">
+          <PlaneIcon />
+        </div>
+      </div>
+
+      {/* Additional planes */}
+      <div className="absolute top-[25%] left-[40%]">
+        <div className="opacity-10 rotate-15">
+          <PlaneIcon />
+        </div>
+      </div>
+
+      <div className="absolute bottom-[40%] right-[25%]">
+        <div className="opacity-10 -rotate-15">
+          <PlaneIcon />
+        </div>
+      </div>
+
+      {/* New center-right plane */}
+      <div className="absolute top-[60%] right-[30%]">
+        <div className="opacity-10 rotate-90">
+          <PlaneIcon />
+        </div>
+      </div>
+
       {/* Multiple Airplane Path Designs for enhanced visual effect */}
       <div className="absolute bottom-0 left-0 w-32 h-32">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="opacity-10">
