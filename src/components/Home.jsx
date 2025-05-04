@@ -90,22 +90,20 @@ const Home = () => {
         <div className='mt-6 flex sm:flex-row flex-col gap-5'>
           <Link to="/visa-enquiry">
             <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='relative overflow-hidden p-4 bg-[#be0b32] text-white text-lg rounded-2xl w-[89vw] md:w-fit hover:bg-[#8c0826] transition-all duration-300 shadow-lg hover:shadow-xl group'
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className='relative p-4 bg-[#be0b32] text-white text-lg rounded-2xl w-[89vw] md:w-fit shadow-lg transition-all duration-300 hover:bg-[#8c0826] hover:shadow-xl'
             >
-              <span className="relative z-10">Get Started</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              <span>Get Started</span>
             </motion.button>
           </Link>   
           <Link>       
             <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='relative overflow-hidden p-4 bg-[#be0b32] text-white text-lg rounded-2xl w-[89vw] md:w-fit hover:bg-[#8c0826] transition-all duration-300 shadow-lg hover:shadow-xl group'
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className='relative p-4 bg-[#be0b32] text-white text-lg rounded-2xl w-[89vw] md:w-fit shadow-lg transition-all duration-300 hover:bg-[#8c0826] hover:shadow-xl'
             >
-              <span className="relative z-10">Book A Consultation</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              <span>Book A Consultation</span>
             </motion.button>
           </Link>
         </div>
@@ -113,12 +111,11 @@ const Home = () => {
         <div className='mt-4'>
           <Link to="/check-visa">
             <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="check-visa-button relative overflow-hidden p-4 bg-[#be0b32] text-white text-lg rounded-2xl w-[89vw] sm:px-[2vw] md:w-[352px] hover:bg-[#8c0826] transition-all duration-300 shadow-lg hover:shadow-xl group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="relative p-4 bg-[#be0b32] text-white text-lg rounded-2xl w-[89vw] sm:px-[2vw] md:w-[352px] shadow-lg transition-all duration-300 hover:bg-[#8c0826] hover:shadow-xl"
             >
-              <span className="relative z-10">Check Visa</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+              <span>Check Visa</span>
             </motion.button>
           </Link>
         </div>

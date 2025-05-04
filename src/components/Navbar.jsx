@@ -70,35 +70,50 @@ const Navbar = ({ scrollToFooter }) => {
   return (
     <>
       <div data-scroll data-scroll-speed="-.5" className="w-full px-[5vw] py-[1.7vw] flex items-center justify-between bg-zinc-50 shadow-md">
-        <h2 className='text-[#be0b32] text-2xl font-bold logo'>VisaEase</h2>
+        <h2 className='text-[#be0b32] text-2xl font-bold logo hover:text-[#8c0826] transition-colors duration-300 group relative'>
+          VisaEase
+          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+        </h2>
         
         <div className="hidden sm:flex gap-[2vw] text-[18px] font-serif font-bold links">
-          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-          <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
-          <Link to="/services" onClick={() => setMenuOpen(false)}>Services</Link>
-          <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+            Home
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+          </Link>
+          <Link to="/about" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+            About Us
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+          </Link>
+          <Link to="/services" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+            Services
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+          </Link>
+          <Link to="/blog" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+            Blog
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+          </Link>
           <button 
             onClick={scrollToFooter}
-            className="contact"
+            className="contact hover:text-[#be0b32] transition-colors duration-300 group relative"
           >
             Contact Us
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
           </button>
         </div>
         
         <div className="hidden sm:flex gap-4 items-center call">
-          <div className="p-4 py-6 bg-[#be0b32] rounded-b-full text-zinc-100 flex items-center justify-center callLogo">
-            {/* Phone icon - can be replaced with an actual SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="p-4 py-6 bg-[#be0b32] rounded-b-full text-zinc-100 flex items-center justify-center callLogo hover:bg-[#8c0826] transition-colors duration-300 cursor-pointer group">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 transform group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
           </div>
           <div className="flex flex-col">
-            <Link to="/login" className="text-[20px] font-light tracking-tight font-mono text-[#be0b32]">Login</Link>
-            <p className="font-mono text-[18px] font-bold">+91 9181716151</p>
+            <Link to="/login" className="text-[20px] font-light tracking-tight font-mono text-[#be0b32] hover:text-[#8c0826] transition-colors duration-300">Login</Link>
+            <p className="font-mono text-[18px] font-bold hover:text-[#be0b32] transition-colors duration-300">+91 9181716151</p>
           </div>
         </div>
         
-        <div className="sm:hidden text-3xl cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
+        <div className="sm:hidden text-3xl cursor-pointer hover:text-[#be0b32] transition-colors duration-300" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <FiX /> : <FiMenu />}
         </div>
       </div>
