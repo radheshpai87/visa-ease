@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook, FaApple } from "react-icons/fa";
 
 const LoginRegistration = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,6 +16,12 @@ const LoginRegistration = () => {
       <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
     </svg>
   );
+
+  const socialIcons = {
+    'Google': <FcGoogle className="w-5 h-5" />,
+    'Facebook': <FaFacebook className="w-5 h-5 text-blue-600" />,
+    'Apple': <FaApple className="w-5 h-5" />
+  };
 
   return (
     <div className="min-h-screen bg-blue-900 flex items-center justify-center px-6 py-12 relative overflow-hidden">
@@ -259,8 +267,9 @@ const LoginRegistration = () => {
                 {['Google', 'Facebook', 'Apple'].map((provider, idx) => (
                   <div
                     key={idx}
-                    className="border rounded-lg p-3 text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                    className="border rounded-lg p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 transition-colors"
                   >
+                    {socialIcons[provider]}
                     <span>{provider}</span>
                   </div>
                 ))}
