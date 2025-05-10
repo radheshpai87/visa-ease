@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaApple } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const LoginRegistration = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,8 +10,38 @@ const LoginRegistration = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  const navigate = useNavigate();
+  const { login, register } = useAuth();
 
-  const toggleForm = () => setIsLogin(!isLogin);
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+    setError('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      if (isLogin) {
+        // Handle login
+        await login(email, password);
+        navigate('/'); // Redirect to home page after successful login
+      } else {
+        // Handle registration
+        await register(name, email, password, phone);
+        navigate('/'); // Redirect to home page after successful registration
+      }
+    } catch (error) {
+      setError(error.message || 'Authentication failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const PlaneIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5" viewBox="0 0 24 24">
@@ -154,7 +186,14 @@ const LoginRegistration = () => {
             </div>
           </div>
 
-          <div className="space-y-6">
+          {/* Display error message if any */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
             {isLogin ? (
               <>
                 <div>
@@ -168,6 +207,7 @@ const LoginRegistration = () => {
                     placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -181,6 +221,7 @@ const LoginRegistration = () => {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="flex justify-between items-center text-sm">
@@ -204,6 +245,7 @@ const LoginRegistration = () => {
                     placeholder="John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -217,6 +259,7 @@ const LoginRegistration = () => {
                     placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -243,47 +286,52 @@ const LoginRegistration = () => {
                     placeholder="Create a password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                 </div>
               </>
             )}
 
-            <button className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center justify-center gap-2">
-              <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
-              <PlaneIcon />
+            <button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <span>{isLogin ? (loading ? 'Signing in...' : 'Sign In') : (loading ? 'Creating Account...' : 'Create Account')}</span>
+              {!loading && <PlaneIcon />}
             </button>
+          </form>
 
-            {/* Social Logins */}
-            <div className="text-center mt-8">
-              <div className="relative mb-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">Or continue with</span>
-                </div>
+          {/* Social Logins */}
+          <div className="text-center mt-8">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
               </div>
-              <div className="grid grid-cols-3 gap-3">
-                {['Google', 'Facebook', 'Apple'].map((provider, idx) => (
-                  <div
-                    key={idx}
-                    className="border rounded-lg p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 transition-colors"
-                  >
-                    {socialIcons[provider]}
-                    <span>{provider}</span>
-                  </div>
-                ))}
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500">Or continue with</span>
               </div>
             </div>
-
-            <div className="text-center mt-6">
-              <p className="text-sm text-gray-600">
-                {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-                <button onClick={toggleForm} className="text-red-600 hover:underline font-medium">
-                  {isLogin ? 'Sign up' : 'Sign in'}
-                </button>
-              </p>
+            <div className="grid grid-cols-3 gap-3">
+              {['Google', 'Facebook', 'Apple'].map((provider, idx) => (
+                <div
+                  key={idx}
+                  className="border rounded-lg p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                >
+                  {socialIcons[provider]}
+                  <span>{provider}</span>
+                </div>
+              ))}
             </div>
+          </div>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-600">
+              {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+              <button onClick={toggleForm} className="text-red-600 hover:underline font-medium">
+                {isLogin ? 'Sign up' : 'Sign in'}
+              </button>
+            </p>
           </div>
         </div>
       </div>

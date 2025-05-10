@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiLogOut } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import favicon from '../assets/favicon.png';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = ({ scrollToFooter }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { currentUser, logout } = useAuth();
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -68,6 +70,13 @@ const Navbar = ({ scrollToFooter }) => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    setMenuOpen(false);
+    // Redirect to home page after logout
+    navigate('/');
+  };
+
   return (
     <>
       <div data-scroll data-scroll-speed="-.5" className="w-full px-[5vw] py-[1.7vw] flex items-center justify-between bg-zinc-50 shadow-md">
@@ -107,7 +116,20 @@ const Navbar = ({ scrollToFooter }) => {
             </svg>
           </div>
           <div className="flex flex-col">
-            <Link to="/login" className="text-[20px] font-light tracking-tight font-mono text-[#be0b32] hover:text-[#8c0826] transition-colors duration-300">Login</Link>
+            {currentUser ? (
+              <div className="flex items-center gap-2">
+                <span className="text-[18px] font-bold text-gray-700">Hi, {currentUser.name?.split(' ')[0]}</span>
+                <button 
+                  onClick={handleLogout}
+                  className="flex items-center gap-1 text-[18px] font-light tracking-tight font-mono text-[#be0b32] hover:text-[#8c0826] transition-colors duration-300"
+                >
+                  <FiLogOut className="text-lg" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="text-[20px] font-light tracking-tight font-mono text-[#be0b32] hover:text-[#8c0826] transition-colors duration-300">Login</Link>
+            )}
             <p className="font-mono text-[18px] font-bold hover:text-[#be0b32] transition-colors duration-300">+91 9181716151</p>
           </div>
         </div>
@@ -125,7 +147,14 @@ const Navbar = ({ scrollToFooter }) => {
           <h4 onClick={() => { setMenuOpen(false); navigate('/services'); }}>Services</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/blog'); }}>Blog</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/contact'); }}>Contact Us</h4>
-          <Link to="/login" className='link' onClick={() => setMenuOpen(false)}>Login</Link>
+          
+          {currentUser ? (
+            <h4 onClick={handleLogout} className="flex items-center gap-2 link">
+              <FiLogOut className="text-[8vw]" /> Logout
+            </h4>
+          ) : (
+            <Link to="/login" className='link' onClick={() => setMenuOpen(false)}>Login</Link>
+          )}
         </div>
       )}
     </>

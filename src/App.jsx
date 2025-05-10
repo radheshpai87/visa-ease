@@ -11,6 +11,7 @@ import MarqueeBanner from './components/MarqueeBanner';
 import Contact from './components/Contact';
 
 import Login from './components/Login';
+import { AuthProvider } from './context/AuthContext';
 
 import SlideSwpr from './components/SlideSwpr';
 import LocomotiveScroll from 'locomotive-scroll';
@@ -83,75 +84,77 @@ const App = () => {
   };
 
   return (
-    <Routes>
-      <Route path="/" element={
-        <div data-scroll-container>
-          <Navbar scrollToFooter={scrollToFooter} />
-          <Home />
-          <SideScroll />
-          <Level />
-          <Center />
-          <SlideSwpr />
-          <Footer ref={footerRef} />
-        </div>
-      } />
-      
-      <Route path="/login" element={
-        <>
-          <MarqueeBanner />
-          <Login />
-        </>
-      } />
-      
-      <Route path="/about" element={
-        <div data-scroll-container>
-          <Navbar scrollToFooter={scrollToFooter} />
-          <About />
-          <Footer ref={footerRef} />
-        </div>
-      } />
-      
-      <Route path="/services" element={
-        <div data-scroll-container>
-          <Navbar scrollToFooter={scrollToFooter} />
-          <Services />
-          <Footer ref={footerRef} />
-        </div>
-      } />
-      
-      <Route path="/blog" element={
-        <div data-scroll-container>
-          <Navbar scrollToFooter={scrollToFooter} />
-          <Blog />
-          <Footer ref={footerRef} />
-        </div>
-      } />
-      
-      <Route path="/visa-enquiry" element={
-        <div>
-          <VisaInquiryForm />
-        </div>
-      } />
-      <Route path="/check-visa" element={
-        <div >
-          <CheckVisa />
-        </div>
-      } />
-      
-      <Route path="/book-consultation" element={
-        <div>
-          <BookConsultation />
-        </div>
-      } />
-      
-      <Route path="/contact" element={
-        <div data-scroll-container>
-          <Navbar scrollToFooter={scrollToFooter} />
-          <Contact />
-          <Footer ref={footerRef} />
-        </div>
-      } />
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={
+          <div data-scroll-container>
+            <Navbar scrollToFooter={scrollToFooter} />
+            <Home />
+            <SideScroll />
+            <Level />
+            <Center />
+            <SlideSwpr />
+            <Footer ref={footerRef} />
+          </div>
+        } />
+        
+        <Route path="/login" element={
+          <>
+            <MarqueeBanner />
+            <Login />
+          </>
+        } />
+        
+        <Route path="/about" element={
+          <div data-scroll-container>
+            <Navbar scrollToFooter={scrollToFooter} />
+            <About />
+            <Footer ref={footerRef} />
+          </div>
+        } />
+        
+        <Route path="/services" element={
+          <div data-scroll-container>
+            <Navbar scrollToFooter={scrollToFooter} />
+            <Services />
+            <Footer ref={footerRef} />
+          </div>
+        } />
+        
+        <Route path="/blog" element={
+          <div data-scroll-container>
+            <Navbar scrollToFooter={scrollToFooter} />
+            <Blog />
+            <Footer ref={footerRef} />
+          </div>
+        } />
+        
+        <Route path="/visa-enquiry" element={
+          <div>
+            <VisaInquiryForm />
+          </div>
+        } />
+        <Route path="/check-visa" element={
+          <div >
+            <CheckVisa />
+          </div>
+        } />
+        
+        <Route path="/book-consultation" element={
+          <div>
+            <BookConsultation />
+          </div>
+        } />
+        
+        <Route path="/contact" element={
+          <div data-scroll-container>
+            <Navbar scrollToFooter={scrollToFooter} />
+            <Contact />
+            <Footer ref={footerRef} />
+          </div>
+        } />
+      </Routes>
+    </AuthProvider>
   );
 };
 
