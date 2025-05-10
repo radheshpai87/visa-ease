@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const LoginRegistration = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  // State for form type: 'login', 'register', or 'forgot-password'
+  const [formType, setFormType] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -13,12 +14,18 @@ const LoginRegistration = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
+  // Forgot password states
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [resetSuccess, setResetSuccess] = useState('');
+  
   const navigate = useNavigate();
-  const { login, register } = useAuth();
+  const { login, register, resetPassword } = useAuth();
 
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
+  const toggleForm = (type) => {
+    setFormType(type);
     setError('');
+    setResetSuccess('');
   };
 
   const handleSubmit = async (e) => {
@@ -27,14 +34,32 @@ const LoginRegistration = () => {
     setLoading(true);
 
     try {
-      if (isLogin) {
+      if (formType === 'login') {
         // Handle login
         await login(email, password);
         navigate('/'); // Redirect to home page after successful login
-      } else {
+      } else if (formType === 'register') {
         // Handle registration
         await register(name, email, password, phone);
         navigate('/'); // Redirect to home page after successful registration
+      } else if (formType === 'forgot-password') {
+        // Handle password reset
+        // Validate passwords match
+        if (newPassword !== confirmPassword) {
+          setError('Passwords do not match');
+          setLoading(false);
+          return;
+        }
+
+        await resetPassword(email, newPassword);
+        setResetSuccess('Password has been reset successfully. You can now log in with your new password.');
+        
+        // Reset form fields and show login form after successful reset
+        setTimeout(() => {
+          setNewPassword('');
+          setConfirmPassword('');
+          setFormType('login');
+        }, 3000);
       }
     } catch (error) {
       setError(error.message || 'Authentication failed');
@@ -164,27 +189,38 @@ const LoginRegistration = () => {
         <div className="p-8 md:w-3/5 relative">
           <div className="flex justify-between items-center mb-8">
             <h3 className="text-2xl font-bold text-gray-800">
-              {isLogin ? 'Welcome Back' : 'Create Account'}
+              {formType === 'login' ? 'Welcome Back' : 
+               formType === 'register' ? 'Create Account' : 
+               'Reset Password'}
             </h3>
             <div className="flex space-x-2">
               <button
+                type="button"
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isLogin ? 'bg-red-600 text-white' : 'text-gray-500'
+                  formType === 'login' ? 'bg-red-600 text-white' : 'text-gray-500'
                 }`}
-                onClick={() => setIsLogin(true)}
+                onClick={() => toggleForm('login')}
               >
                 Login
               </button>
               <button
+                type="button"
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  !isLogin ? 'bg-red-600 text-white' : 'text-gray-500'
+                  formType === 'register' ? 'bg-red-600 text-white' : 'text-gray-500'
                 }`}
-                onClick={() => setIsLogin(false)}
+                onClick={() => toggleForm('register')}
               >
                 Register
               </button>
             </div>
           </div>
+
+          {/* Reset success message */}
+          {resetSuccess && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-4">
+              {resetSuccess}
+            </div>
+          )}
 
           {/* Display error message if any */}
           {error && (
@@ -194,7 +230,8 @@ const LoginRegistration = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {isLogin ? (
+            {/* LOGIN FORM */}
+            {formType === 'login' && (
               <>
                 <div>
                   <label htmlFor="email-login" className="block text-sm font-medium text-gray-700 mb-2">
@@ -229,10 +266,19 @@ const LoginRegistration = () => {
                     <input type="checkbox" className="h-4 w-4 text-red-600" />
                     <span className="ml-2">Remember me</span>
                   </label>
-                  <a href="#" className="text-red-600 hover:underline">Forgot password?</a>
+                  <button 
+                    type="button"
+                    className="text-red-600 hover:underline"
+                    onClick={() => toggleForm('forgot-password')}
+                  >
+                    Forgot password?
+                  </button>
                 </div>
               </>
-            ) : (
+            )}
+
+            {/* REGISTER FORM */}
+            {formType === 'register' && (
               <>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -292,47 +338,124 @@ const LoginRegistration = () => {
               </>
             )}
 
+            {/* FORGOT PASSWORD FORM */}
+            {formType === 'forgot-password' && (
+              <>
+                <div>
+                  <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    id="forgot-email"
+                    type="email"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 mb-2">
+                    New Password
+                  </label>
+                  <input
+                    id="new-password"
+                    type="password"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                    placeholder="Create a new password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-2">
+                    Confirm New Password
+                  </label>
+                  <input
+                    id="confirm-password"
+                    type="password"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                    placeholder="Confirm your new password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
+            )}
+
             <button 
               type="submit"
               disabled={loading}
               className="w-full bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
             >
-              <span>{isLogin ? (loading ? 'Signing in...' : 'Sign In') : (loading ? 'Creating Account...' : 'Create Account')}</span>
+              <span>
+                {formType === 'login' 
+                  ? (loading ? 'Signing in...' : 'Sign In') 
+                  : formType === 'register'
+                    ? (loading ? 'Creating Account...' : 'Create Account')
+                    : (loading ? 'Resetting Password...' : 'Reset Password')}
+              </span>
               {!loading && <PlaneIcon />}
             </button>
           </form>
 
-          {/* Social Logins */}
-          <div className="text-center mt-8">
-            <div className="relative mb-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Or continue with</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              {['Google', 'Facebook', 'Apple'].map((provider, idx) => (
-                <div
-                  key={idx}
-                  className="border rounded-lg p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 transition-colors"
+          {/* Back to Login link (only for forgot password) */}
+          {formType === 'forgot-password' && (
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-600">
+                Remember your password?{' '}
+                <button 
+                  onClick={() => toggleForm('login')} 
+                  className="text-red-600 hover:underline font-medium"
                 >
-                  {socialIcons[provider]}
-                  <span>{provider}</span>
-                </div>
-              ))}
+                  Back to login
+                </button>
+              </p>
             </div>
-          </div>
+          )}
 
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-600">
-              {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-              <button onClick={toggleForm} className="text-red-600 hover:underline font-medium">
-                {isLogin ? 'Sign up' : 'Sign in'}
-              </button>
-            </p>
-          </div>
+          {/* Social Logins (only for login and register) */}
+          {formType !== 'forgot-password' && (
+            <div className="text-center mt-8">
+              <div className="relative mb-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {['Google', 'Facebook', 'Apple'].map((provider, idx) => (
+                  <div
+                    key={idx}
+                    className="border rounded-lg p-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                  >
+                    {socialIcons[provider]}
+                    <span>{provider}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Toggle between login/register (not shown for forgot password) */}
+          {formType !== 'forgot-password' && (
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-600">
+                {formType === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
+                <button 
+                  onClick={() => toggleForm(formType === 'login' ? 'register' : 'login')} 
+                  className="text-red-600 hover:underline font-medium"
+                >
+                  {formType === 'login' ? 'Sign up' : 'Sign in'}
+                </button>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

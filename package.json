@@ -1,5 +1,5 @@
 {
-  "homepage": "https://maheshshanbhag.github.io/visa_system",
+  "homepage": "https://visa-ease.vercel.app",
   "name": "visa_sysyem",
   "private": true,
   "version": "0.0.0",
@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "host": "vite --host",
     "server": "node server/server.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run server\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
+    "vercel-build": "vite build"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

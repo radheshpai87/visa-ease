@@ -4,6 +4,16 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
+// Helper to get the API URL based on environment
+const getApiUrl = (endpoint) => {
+  // For development - use full URL with port
+  if (import.meta.env.DEV) {
+    return `http://localhost:5000/api${endpoint}`;
+  }
+  // For production - use relative path (handled by Vercel)
+  return `/api${endpoint}`;
+};
+
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError('');
       
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(getApiUrl('/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +70,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError('');
       
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(getApiUrl('/auth/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,6 +105,35 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  // Simplified reset password function - directly reset with email
+  const resetPassword = async (email, newPassword) => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      const response = await fetch(getApiUrl('/auth/reset-password-direct'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, newPassword }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to reset password');
+      }
+
+      return data;
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     currentUser,
     loading,
@@ -102,6 +141,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    resetPassword
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

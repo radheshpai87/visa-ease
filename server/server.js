@@ -7,13 +7,12 @@ import authRoutes from './routes/auth.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 
-// Routes
+// Routes - Change the base path to /api/auth for Vercel deployment
 app.use('/api/auth', authRoutes);
 
 // MongoDB Connection
@@ -43,21 +42,28 @@ const connectDB = async () => {
     console.log('MongoDB Atlas connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    process.exit(1);
+    return error;
   }
 };
 
 // Basic route for testing
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('VisaEase Authentication API is running');
 });
 
-// Start server
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// For Vercel serverless deployment
+if (process.env.NODE_ENV !== 'production') {
+  // In development, start the server normally
+  const PORT = process.env.PORT || 5000;
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  }).catch(err => {
+    console.error('Failed to connect to MongoDB:', err);
   });
-}).catch(err => {
-  console.error('Failed to connect to MongoDB:', err);
-  process.exit(1);
-});
+}
+
+// For production on Vercel, export the app with DB connection handling
+connectDB();
+export default app;
