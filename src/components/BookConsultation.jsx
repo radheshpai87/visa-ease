@@ -1,32 +1,44 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-const VisaInquiryForm = () => {
+const BookConsultation = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    nationality: "",
-    residence: "",
-    visaType: "",
-    destination: "",
-    travelDate: "",
-    purpose: "",
-    comments: "",
-    consent: false,
+    fullName: '',
+    email: '',
+    phone: '',
+    consultationType: '',
+    preferredDate: '',
+    preferredTime: '',
+    visaCategory: '',
+    questions: '',
+    howDidYouHear: '',
+    agreeToTerms: false
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    alert("Form submitted successfully!");
+    alert('Consultation booking request submitted successfully! We will contact you shortly to confirm your appointment.');
+    // Reset form after submission
+    setFormData({
+      fullName: '',
+      email: '',
+      phone: '',
+      consultationType: '',
+      preferredDate: '',
+      preferredTime: '',
+      visaCategory: '',
+      questions: '',
+      howDidYouHear: '',
+      agreeToTerms: false
+    });
   };
 
   return (
@@ -103,13 +115,14 @@ const VisaInquiryForm = () => {
 
       {/* Main Content */}
       <div className="relative w-full max-w-4xl px-6 z-10">
-        <h2 className="text-4xl font-bold text-white text-center mb-3">Visa Inquiry Form</h2>
-        <p className="text-gray-200 text-center text-lg mb-8">Fill in your details to submit a visa inquiry</p>
+        <h2 className="text-4xl font-bold text-white text-center mb-3">Book a Consultation</h2>
+        <p className="text-gray-200 text-center text-lg mb-10">Schedule a personalized consultation with our visa experts</p>
         
         <div className="bg-white rounded-xl shadow-2xl p-8">
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+            {/* Personal Information */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name*</label>
               <input
                 type="text"
                 id="fullName"
@@ -123,7 +136,7 @@ const VisaInquiryForm = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address*</label>
               <input
                 type="email"
                 id="email"
@@ -137,7 +150,7 @@ const VisaInquiryForm = () => {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
               <input
                 type="tel"
                 id="phone"
@@ -149,87 +162,133 @@ const VisaInquiryForm = () => {
                 placeholder="Enter your phone number"
               />
             </div>
-
+            
             <div>
-              <label htmlFor="nationality" className="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
-              <input
-                type="text"
-                id="nationality"
-                name="nationality"
-                value={formData.nationality}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
-                placeholder="Your nationality"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="visaType" className="block text-sm font-medium text-gray-700 mb-1">Visa Type</label>
+              <label htmlFor="consultationType" className="block text-sm font-medium text-gray-700 mb-1">Consultation Type*</label>
               <select
-                id="visaType"
-                name="visaType"
-                value={formData.visaType}
+                id="consultationType"
+                name="consultationType"
+                value={formData.consultationType}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
               >
-                <option value="">Select Visa Type</option>
-                <option value="Student Visa">Student Visa</option>
-                <option value="Tourist Visa">Tourist Visa</option>
-                <option value="Business Visa">Business Visa</option>
-                <option value="Work Permit">Work Permit</option>
-                <option value="Family Visa">Family Visa</option>
-                <option value="Medical Visa">Medical Visa</option>
-                <option value="Official Visa">Official Visa</option>
+                <option value="">Select Consultation Type</option>
+                <option value="Online">Online (Video Call)</option>
+                <option value="In-Person">In-Person</option>
+                <option value="Phone">Phone Call</option>
+              </select>
+            </div>
+
+            {/* Appointment Details */}
+            <div>
+              <label htmlFor="preferredDate" className="block text-sm font-medium text-gray-700 mb-1">Preferred Date*</label>
+              <input
+                type="date"
+                id="preferredDate"
+                name="preferredDate"
+                value={formData.preferredDate}
+                onChange={handleChange}
+                required
+                min={new Date().toISOString().split('T')[0]}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="preferredTime" className="block text-sm font-medium text-gray-700 mb-1">Preferred Time*</label>
+              <select
+                id="preferredTime"
+                name="preferredTime"
+                value={formData.preferredTime}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+              >
+                <option value="">Select Time Slot</option>
+                <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+                <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                <option value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
+                <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+                <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+                <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
               </select>
             </div>
 
             <div>
-              <label htmlFor="destination" className="block text-sm font-medium text-gray-700 mb-1">Destination Country</label>
-              <input
-                type="text"
-                id="destination"
-                name="destination"
-                value={formData.destination}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
-                placeholder="Enter destination country"
-              />
-            </div>
-
-            <div className="col-span-2">
-              <label htmlFor="purpose" className="block text-sm font-medium text-gray-700 mb-1">Purpose of Travel</label>
-              <textarea
-                id="purpose"
-                name="purpose"
-                value={formData.purpose}
-                onChange={handleChange}
-                rows="3"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
-                placeholder="Describe your travel purpose"
-              />
-            </div>
-
-            <div className="col-span-2 flex items-center space-x-2 mt-2">
-              <input
-                type="checkbox"
-                id="consent"
-                name="consent"
-                checked={formData.consent}
+              <label htmlFor="visaCategory" className="block text-sm font-medium text-gray-700 mb-1">Visa Category*</label>
+              <select
+                id="visaCategory"
+                name="visaCategory"
+                value={formData.visaCategory}
                 onChange={handleChange}
                 required
-                className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-600"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+              >
+                <option value="">Select Visa Category</option>
+                <option value="Student Visa">Student Visa</option>
+                <option value="Work Visa">Work Visa</option>
+                <option value="Tourist Visa">Tourist Visa</option>
+                <option value="Business Visa">Business Visa</option>
+                <option value="Family Visa">Family Visa</option>
+                <option value="Permanent Residency">Permanent Residency</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="howDidYouHear" className="block text-sm font-medium text-gray-700 mb-1">How did you hear about us?</label>
+              <select
+                id="howDidYouHear"
+                name="howDidYouHear"
+                value={formData.howDidYouHear}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+              >
+                <option value="">Select an option</option>
+                <option value="Google">Google Search</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Friend">Friend/Family</option>
+                <option value="Advertisement">Advertisement</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            {/* Additional Information */}
+            <div className="md:col-span-2">
+              <label htmlFor="questions" className="block text-sm font-medium text-gray-700 mb-1">Questions or Special Requirements</label>
+              <textarea
+                id="questions"
+                name="questions"
+                value={formData.questions}
+                onChange={handleChange}
+                rows="4"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                placeholder="Please share any specific questions or requirements you have for the consultation"
               />
-              <label htmlFor="consent" className="text-sm text-gray-700">
-                I agree to be contacted regarding my visa inquiry
+            </div>
+
+            <div className="md:col-span-2 flex items-start space-x-2">
+              <input
+                type="checkbox"
+                id="agreeToTerms"
+                name="agreeToTerms"
+                checked={formData.agreeToTerms}
+                onChange={handleChange}
+                required
+                className="mt-1 w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-600"
+              />
+              <label htmlFor="agreeToTerms" className="text-sm text-gray-700">
+                I agree to be contacted regarding my consultation request and understand that I can reschedule or cancel with at least 24 hours notice*
               </label>
             </div>
 
             <button 
               type="submit" 
-              className="col-span-2 bg-red-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-red-700 transition duration-300 mt-4"
+              className="md:col-span-2 bg-red-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-red-700 transition duration-300 mt-4"
             >
-              Submit Inquiry
+              Book Consultation
             </button>
           </form>
         </div>
@@ -238,4 +297,4 @@ const VisaInquiryForm = () => {
   );
 };
 
-export default VisaInquiryForm;
+export default BookConsultation;

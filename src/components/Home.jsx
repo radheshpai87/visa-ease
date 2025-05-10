@@ -97,7 +97,7 @@ const Home = () => {
               <span>Get Started</span>
             </motion.button>
           </Link>   
-          <Link>       
+          <Link to="/book-consultation">       
             <motion.button 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

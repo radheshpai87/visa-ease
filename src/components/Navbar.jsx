@@ -4,6 +4,7 @@ import { FiMenu, FiX } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import favicon from '../assets/favicon.png';
 
 const Navbar = ({ scrollToFooter }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -70,7 +71,8 @@ const Navbar = ({ scrollToFooter }) => {
   return (
     <>
       <div data-scroll data-scroll-speed="-.5" className="w-full px-[5vw] py-[1.7vw] flex items-center justify-between bg-zinc-50 shadow-md">
-        <h2 className='text-[#be0b32] text-2xl font-bold logo hover:text-[#8c0826] transition-colors duration-300 group relative'>
+        <h2 className='flex items-center text-[#be0b32] text-2xl font-bold logo hover:text-[#8c0826] transition-colors duration-300 group relative'>
+          <img src={favicon} alt="VisaEase Logo" className="h-6 w-6 mr-2" />
           VisaEase
           <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
         </h2>

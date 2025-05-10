@@ -19,6 +19,7 @@ import Services from './components/Services';
 import Blog from './components/Blog';
 import VisaInquiryForm from './components/VisaInquiryForm';
 import CheckVisa from './components/CheckVisa';
+import BookConsultation from './components/BookConsultation';
 
 const App = () => {
   const footerRef = useRef(null);
@@ -134,6 +135,12 @@ const App = () => {
       <Route path="/check-visa" element={
         <div >
           <CheckVisa />
+        </div>
+      } />
+      
+      <Route path="/book-consultation" element={
+        <div>
+          <BookConsultation />
         </div>
       } />
       
