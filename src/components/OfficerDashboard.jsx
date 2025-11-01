@@ -34,7 +34,8 @@ const OfficerDashboard = () => {
         setApplications(appsRes.data);
         setFilteredApplications(appsRes.data);
         setStatistics(statsRes.data);
-      } catch {
+      } catch (error) {
+        console.error('Failed to load officer data:', error);
         toast.error('Failed to load dashboard data');
       } finally {
         setLoading(false);

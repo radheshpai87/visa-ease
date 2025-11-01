@@ -1,9 +1,16 @@
 import axios from 'axios';
 
+// Get API base URL from environment variable (without /api suffix since routes include it)
+const envURL = import.meta.env.VITE_API_BASE_URL || 'https://visa-ease-sandy.vercel.app/api';
+// Remove /api from the end if present, since our routes already include /api/
+const baseURL = envURL.replace(/\/api\/?$/, '');
+
+console.log('Axios instance Base URL:', baseURL);
+
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000',
-  timeout: 10000,
+  baseURL: baseURL,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
