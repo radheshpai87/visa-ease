@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
       return data.user; // Return user data for redirect
     } catch (error) {
       console.error('Login failed', error);
+      console.error('Error response:', error.response?.data);
       throw error;
     } finally {
       setLoading(false);

@@ -69,21 +69,32 @@ const connectDB = async () => {
 
 // Health check routes
 app.get('/api', (req, res) => {
-  res.json({ 
-    message: 'Visa Management API is running',
-    status: 'success',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
+  res.json({ message: 'API is running', timestamp: new Date().toISOString() });
 });
 
 app.get('/api/health', async (req, res) => {
-  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-  res.json({ 
-    status: 'ok',
-    mongodb: dbStatus,
-    timestamp: new Date().toISOString()
-  });
+  try {
+    const User = (await import('../server/models/User.js')).default;
+    const userCount = await User.countDocuments();
+    
+    res.json({ 
+      status: 'healthy', 
+      database: isConnected ? 'connected' : 'disconnected',
+      users: userCount,
+      hasJWTSecret: !!process.env.JWT_SECRET,
+      hasMongoURI: !!process.env.MONGODB_URI,
+      timestamp: new Date().toISOString() 
+    });
+  } catch (error) {
+    res.json({ 
+      status: 'healthy', 
+      database: isConnected ? 'connected' : 'disconnected',
+      error: error.message,
+      hasJWTSecret: !!process.env.JWT_SECRET,
+      hasMongoURI: !!process.env.MONGODB_URI,
+      timestamp: new Date().toISOString() 
+    });
+  }
 });
 
 // API Routes
