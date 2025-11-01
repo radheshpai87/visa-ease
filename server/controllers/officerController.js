@@ -7,6 +7,9 @@ import ApplicationStatus from '../models/ApplicationStatus.js';
 // @access  Private (Officer)
 export const getAssignedApplications = async (req, res) => {
   try {
+    console.log('getAssignedApplications called');
+    console.log('req.user:', req.user);
+    
     // req.user comes from JWT decode which has userId (not _id)
     const userId = req.user.userId || req.user._id;
     
@@ -15,6 +18,8 @@ export const getAssignedApplications = async (req, res) => {
       return res.status(401).json({ message: 'Invalid authentication token' });
     }
 
+    console.log('Looking for officer with user_id:', userId);
+    
     // Find the officer profile for the logged-in user
     let officer = await Officer.findOne({ user_id: userId });
     
@@ -30,12 +35,15 @@ export const getAssignedApplications = async (req, res) => {
       console.log('Officer profile created:', officer);
     }
 
+    console.log('Fetching all applications...');
+    
     // Get ALL applications (officers can see all applications, not just assigned ones)
     // This makes more sense for a visa processing system where officers may need to review any application
     const applications = await VisaApplication.find()
       .populate('applicant_id type_id status_id assigned_officer_id')
       .sort({ application_date: -1 });
 
+    console.log('Found', applications.length, 'applications');
     res.status(200).json(applications);
   } catch (error) {
     console.error('Error in getAssignedApplications:', error);
