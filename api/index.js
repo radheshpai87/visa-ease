@@ -9,6 +9,8 @@ import applicationRoutes from '../server/routes/applicationRoutes.js';
 import documentRoutes from '../server/routes/documentRoutes.js';
 import adminRoutes from '../server/routes/adminRoutes.js';
 import reviewRoutes from '../server/routes/reviewRoutes.js';
+import officerRoutes from '../server/routes/officerRoutes.js';
+import applicantRoutes from '../server/routes/applicantRoutes.js';
 
 dotenv.config();
 
@@ -103,6 +105,8 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/officer', officerRoutes);
+app.use('/api/applicant', applicantRoutes);
 
 // Visa Types route (simple implementation)
 app.get('/api/visa-types', async (req, res) => {
@@ -116,75 +120,8 @@ app.get('/api/visa-types', async (req, res) => {
   }
 });
 
-// Officer routes
-app.get('/api/officer/applications', async (req, res) => {
-  try {
-    const { protect, authorize } = await import('../server/middleware/authMiddleware.js');
-    const { getAssignedApplications } = await import('../server/controllers/officerController.js');
-    
-    // Apply middleware and controller
-    await protect(req, res, async () => {
-      await authorize('officer')(req, res, async () => {
-        await getAssignedApplications(req, res);
-      });
-    });
-  } catch (error) {
-    console.error('Error in officer applications:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-app.get('/api/officer/statistics', async (req, res) => {
-  try {
-    const { protect, authorize } = await import('../server/middleware/authMiddleware.js');
-    const { getOfficerStats } = await import('../server/controllers/officerController.js');
-    
-    await protect(req, res, async () => {
-      await authorize('officer')(req, res, async () => {
-        await getOfficerStats(req, res);
-      });
-    });
-  } catch (error) {
-    console.error('Error in officer statistics:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-// Applicant routes
-app.get('/api/applicant/statistics', async (req, res) => {
-  try {
-    const { protect, authorize } = await import('../server/middleware/authMiddleware.js');
-    const { getApplicantStats } = await import('../server/controllers/applicantController.js');
-    
-    await protect(req, res, async () => {
-      await authorize('applicant')(req, res, async () => {
-        await getApplicantStats(req, res);
-      });
-    });
-  } catch (error) {
-    console.error('Error in applicant statistics:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-app.get('/api/applicant/applications', async (req, res) => {
-  try {
-    const { protect, authorize } = await import('../server/middleware/authMiddleware.js');
-    const { getMyApplications } = await import('../server/controllers/applicantController.js');
-    
-    await protect(req, res, async () => {
-      await authorize('applicant')(req, res, async () => {
-        await getMyApplications(req, res);
-      });
-    });
-  } catch (error) {
-    console.error('Error in applicant applications:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
     message: err.message || 'Internal Server Error',
