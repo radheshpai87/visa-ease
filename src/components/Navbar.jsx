@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FiMenu, FiX, FiLogOut } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
@@ -7,11 +7,10 @@ import { useGSAP } from '@gsap/react';
 import favicon from '../assets/favicon.png';
 import { useAuth } from '../context/AuthContext';
 
-const Navbar = ({ scrollToFooter }) => {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { currentUser, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -53,22 +52,6 @@ const Navbar = ({ scrollToFooter }) => {
     }
   }, [menuOpen]);
 
-  // Improved contact click handler
-  const handleContactClick = () => {
-    setMenuOpen(false);
-    
-    if (location.pathname === '/') {
-      // If we're already on the home page, just scroll
-      scrollToFooter();
-    } else {
-      // Navigate to home and then scroll
-      navigate('/');
-      // Wait for navigation to complete before scrolling
-      setTimeout(() => {
-        scrollToFooter();
-      }, 300); // Longer timeout to ensure navigation completes
-    }
-  };
 
   const handleLogout = () => {
     logout();
@@ -99,14 +82,29 @@ const Navbar = ({ scrollToFooter }) => {
             Services
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <Link to="/blog" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
-            Blog
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
-          </Link>
           <Link to="/contact" onClick={() => setMenuOpen(false)} className="contact hover:text-[#be0b32] transition-colors duration-300 group relative">
             Contact Us
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
           </Link>
+          {/* Single dashboard link per role */}
+          {user && user.role === 'applicant' && (
+            <Link to="/applicant-dashboard" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+              Dashboard
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+            </Link>
+          )}
+          {user && user.role === 'officer' && (
+            <Link to="/officer-dashboard" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+              Dashboard
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+            </Link>
+          )}
+          {user && user.role === 'admin' && (
+            <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)} className="hover:text-[#be0b32] transition-colors duration-300 group relative">
+              Dashboard
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#be0b32] group-hover:w-full transition-all duration-300"></span>
+            </Link>
+          )}
         </div>
         
         <div className="hidden sm:flex gap-4 items-center call">
@@ -116,9 +114,9 @@ const Navbar = ({ scrollToFooter }) => {
             </svg>
           </div>
           <div className="flex flex-col">
-            {currentUser ? (
+            {user ? (
               <div className="flex items-center gap-2">
-                <span className="text-[18px] font-bold text-gray-700">Hi, {currentUser.name?.split(' ')[0]}</span>
+                <span className="text-[18px] font-bold text-gray-700">Hi, {user.username}</span>
                 <button 
                   onClick={handleLogout}
                   className="flex items-center gap-1 text-[18px] font-light tracking-tight font-mono text-[#be0b32] hover:text-[#8c0826] transition-colors duration-300"
@@ -135,7 +133,7 @@ const Navbar = ({ scrollToFooter }) => {
         </div>
         
         <div className="sm:hidden text-3xl cursor-pointer hover:text-[#be0b32] transition-colors duration-300" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <FiX /> : <FiMenu />}
+          {menuOpen ? <FiX /> : <FiX />}
         </div>
       </div>
       
@@ -145,10 +143,18 @@ const Navbar = ({ scrollToFooter }) => {
           <h4 onClick={() => { setMenuOpen(false); navigate('/'); }}>Home</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/about'); }}>About Us</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/services'); }}>Services</h4>
-          <h4 onClick={() => { setMenuOpen(false); navigate('/blog'); }}>Blog</h4>
           <h4 onClick={() => { setMenuOpen(false); navigate('/contact'); }}>Contact Us</h4>
-          
-          {currentUser ? (
+          {/* Single dashboard link per role */}
+          {user && user.role === 'applicant' && (
+            <h4 onClick={() => { setMenuOpen(false); navigate('/applicant-dashboard'); }}>Dashboard</h4>
+          )}
+          {user && user.role === 'officer' && (
+            <h4 onClick={() => { setMenuOpen(false); navigate('/officer-dashboard'); }}>Dashboard</h4>
+          )}
+          {user && user.role === 'admin' && (
+            <h4 onClick={() => { setMenuOpen(false); navigate('/admin-dashboard'); }}>Dashboard</h4>
+          )}
+          {user ? (
             <h4 onClick={handleLogout} className="flex items-center gap-2 link">
               <FiLogOut className="text-[8vw]" /> Logout
             </h4>

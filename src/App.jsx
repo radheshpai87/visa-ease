@@ -9,10 +9,7 @@ import Level from './components/Level';
 import Footer from './components/Footer';
 import MarqueeBanner from './components/MarqueeBanner';
 import Contact from './components/Contact';
-
 import Login from './components/Login';
-import { AuthProvider } from './context/AuthContext';
-
 import SlideSwpr from './components/SlideSwpr';
 import LocomotiveScroll from 'locomotive-scroll';
 import About from './components/About';
@@ -21,46 +18,60 @@ import Blog from './components/Blog';
 import VisaInquiryForm from './components/VisaInquiryForm';
 import CheckVisa from './components/CheckVisa';
 import BookConsultation from './components/BookConsultation';
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
+import ApplicantDashboard from './components/ApplicantDashboard';
+import OfficerDashboard from './components/OfficerDashboard';
+import ApplicationDetails from './components/ApplicationDetails';
+import VisaApplicationForm from './components/VisaApplicationForm';
+import OfficerReviewForm from './components/OfficerReviewForm';
+import AdminRegister from './components/AdminRegister';
+import AdminAuth from './components/AdminAuth';
+import Profile from './components/Profile';
+import ApplicationHistory from './components/ApplicationHistory';
+import NotFound from './components/NotFound';
 
 const App = () => {
   const footerRef = useRef(null);
   const location = useLocation();
   const locomotiveScrollRef = useRef(null);
   
-  // Initialize locomotive scroll
   useEffect(() => {
-    if (!locomotiveScrollRef.current) {
+    const scrollContainer = document.querySelector('[data-scroll-container]');
+    if (scrollContainer && !locomotiveScrollRef.current) {
       locomotiveScrollRef.current = new LocomotiveScroll({
-        el: document.querySelector('[data-scroll-container]'),
+        el: scrollContainer,
         smooth: true,
       });
     }
-    
-    // Reset and update scroll on route change
+
     const handleRouteChange = () => {
-      if (locomotiveScrollRef.current) {
+      if (
+        locomotiveScrollRef.current &&
+        typeof locomotiveScrollRef.current.update === 'function'
+      ) {
         setTimeout(() => {
           locomotiveScrollRef.current.update();
         }, 100);
       }
     };
-    
+
     handleRouteChange();
-    
+
     return () => {
-      // Only destroy on component unmount, not on route changes
-      if (locomotiveScrollRef.current) {
+      if (
+        locomotiveScrollRef.current &&
+        typeof locomotiveScrollRef.current.destroy === 'function'
+      ) {
         locomotiveScrollRef.current.destroy();
         locomotiveScrollRef.current = null;
       }
     };
   }, [location.pathname]);
   
-  // Scroll to footer function with improved handling
   const scrollToFooter = () => {
-    // Method 1: Using the ref if available
     if (footerRef.current) {
-      // For locomotive scroll
       if (locomotiveScrollRef.current) {
         locomotiveScrollRef.current.scrollTo(footerRef.current, {
           offset: 0,
@@ -68,14 +79,12 @@ const App = () => {
           easing: [0.25, 0.0, 0.35, 1.0]
         });
       } else {
-        // Fallback to native scrolling
         footerRef.current.scrollIntoView({ 
           behavior: 'smooth',
           block: 'start'
         });
       }
     } else {
-      // Method 2: If ref isn't available, scroll to bottom of page
       window.scrollTo({
         top: document.body.scrollHeight,
         behavior: 'smooth'
@@ -84,77 +93,134 @@ const App = () => {
   };
 
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/" element={
-          <div data-scroll-container>
-            <Navbar scrollToFooter={scrollToFooter} />
-            <Home />
-            <SideScroll />
-            <Level />
-            <Center />
-            <SlideSwpr />
-            <Footer ref={footerRef} />
-          </div>
-        } />
-        
-        <Route path="/login" element={
-          <>
-            <MarqueeBanner />
-            <Login />
-          </>
-        } />
-        
-        <Route path="/about" element={
-          <div data-scroll-container>
-            <Navbar scrollToFooter={scrollToFooter} />
-            <About />
-            <Footer ref={footerRef} />
-          </div>
-        } />
-        
-        <Route path="/services" element={
-          <div data-scroll-container>
-            <Navbar scrollToFooter={scrollToFooter} />
-            <Services />
-            <Footer ref={footerRef} />
-          </div>
-        } />
-        
-        <Route path="/blog" element={
-          <div data-scroll-container>
-            <Navbar scrollToFooter={scrollToFooter} />
-            <Blog />
-            <Footer ref={footerRef} />
-          </div>
-        } />
-        
-        <Route path="/visa-enquiry" element={
-          <div>
-            <VisaInquiryForm />
-          </div>
-        } />
-        <Route path="/check-visa" element={
-          <div >
-            <CheckVisa />
-          </div>
-        } />
-        
-        <Route path="/book-consultation" element={
-          <div>
-            <BookConsultation />
-          </div>
-        } />
-        
-        <Route path="/contact" element={
-          <div data-scroll-container>
-            <Navbar scrollToFooter={scrollToFooter} />
-            <Contact />
-            <Footer ref={footerRef} />
-          </div>
-        } />
-      </Routes>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <Home />
+          <SideScroll />
+          <Level />
+          <Center />
+          <SlideSwpr />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+
+      <Route path="/login" element={
+        <>
+          <MarqueeBanner />
+          <Login />
+        </>
+      } />
+
+      {/* Admin portal - login and register */}
+      <Route path="/admin" element={<AdminAuth />} />
+
+      {/* Admin registration - legacy route (backward compatibility) */}
+      <Route path="/admin-secret-register" element={
+        <>
+          <MarqueeBanner />
+          <AdminRegister />
+        </>
+      } />
+
+      {/* Main dashboard route: role-based rendering */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+
+      {/* Applicant dashboard */}
+      <Route path="/applicant-dashboard" element={
+        <ProtectedRoute allowedRoles={['applicant']}>
+          <ApplicantDashboard />
+        </ProtectedRoute>
+      } />
+
+      {/* Officer dashboard */}
+      <Route path="/officer-dashboard" element={
+        <ProtectedRoute allowedRoles={['officer']}>
+          <OfficerDashboard />
+        </ProtectedRoute>
+      } />
+
+      {/* Admin dashboard */}
+      <Route path="/admin-dashboard" element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      } />
+
+      {/* Visa application form (applicant) */}
+      <Route path="/apply" element={
+        <ProtectedRoute allowedRoles={['applicant']}>
+          <VisaApplicationForm />
+        </ProtectedRoute>
+      } />
+
+      {/* Application details (all roles) */}
+      <Route path="/applications/:id" element={
+        <ProtectedRoute>
+          <ApplicationDetails />
+        </ProtectedRoute>
+      } />
+
+      {/* Officer review form */}
+      <Route path="/officer/review/:id" element={
+        <ProtectedRoute allowedRoles={['officer']}>
+          <OfficerReviewForm />
+        </ProtectedRoute>
+      } />
+
+      {/* Profile page (all authenticated users) */}
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
+
+      {/* Application History page (all authenticated users) */}
+      <Route path="/application-history" element={
+        <ProtectedRoute>
+          <ApplicationHistory />
+        </ProtectedRoute>
+      } />
+
+      {/* Existing routes */}
+      <Route path="/about" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <About />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="/services" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <Services />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="/blog" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <Blog />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="/visa-enquiry" element={<VisaInquiryForm />} />
+      <Route path="/check-visa" element={<CheckVisa />} />
+      <Route path="/book-consultation" element={<BookConsultation />} />
+      <Route path="/contact" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <Contact />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

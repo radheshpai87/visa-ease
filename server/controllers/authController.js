@@ -1,11 +1,17 @@
 import User from '../models/User.js';
+import Applicant from '../models/Applicant.js';
+import Officer from '../models/Officer.js';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 
 // Register a new user
 export const register = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { username, email, password, phone, role, full_name, passport_number, nationality, address, department } = req.body;
+
+    // Don't allow admin registration through public endpoint
+    if (role === 'admin') {
+      return res.status(403).json({ message: 'Admin registration not allowed through this endpoint' });
+    }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -15,18 +21,42 @@ export const register = async (req, res) => {
 
     // Create new user
     const user = new User({
-      name,
+      username,
       email,
       password,
-      phone
+      phone,
+      role: role || 'applicant' // Default to applicant
     });
 
     await user.save();
 
+    // Create role-specific profile
+    if (user.role === 'applicant') {
+      const applicantData = {
+        user_id: user._id,
+        full_name: full_name || username
+      };
+      
+      // Only add these fields if they have actual values
+      if (passport_number) applicantData.passport_number = passport_number;
+      if (nationality) applicantData.nationality = nationality;
+      if (address) applicantData.address = address;
+      
+      const applicant = new Applicant(applicantData);
+      await applicant.save();
+    } else if (user.role === 'officer') {
+      const officer = new Officer({
+        user_id: user._id,
+        full_name: full_name || username,
+        department: department || 'Visa Processing'
+      });
+      await officer.save();
+    }
+
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'fallbacksecret',
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
@@ -35,12 +65,72 @@ export const register = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
-        email: user.email
+        username: user.username,
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error) {
     console.error('Registration error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Admin registration (separate, protected endpoint)
+export const registerAdmin = async (req, res) => {
+  try {
+    const { username, email, password, phone, adminSecretKey } = req.body;
+
+    // Debug logging
+    console.log('Received adminSecretKey:', adminSecretKey);
+    console.log('Expected adminSecretKey:', process.env.ADMIN_SECRET_KEY);
+    console.log('Match:', adminSecretKey === process.env.ADMIN_SECRET_KEY);
+
+    // Check admin secret key (you should set this in your .env)
+    if (!process.env.ADMIN_SECRET_KEY) {
+      return res.status(500).json({ message: 'Server configuration error: ADMIN_SECRET_KEY not set' });
+    }
+
+    if (adminSecretKey !== process.env.ADMIN_SECRET_KEY) {
+      return res.status(403).json({ message: 'Invalid admin secret key' });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Create admin user
+    const user = new User({
+      username,
+      email,
+      password,
+      phone,
+      role: 'admin'
+    });
+
+    await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({
+      message: 'Admin registered successfully',
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Admin registration error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -64,8 +154,8 @@ export const login = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'fallbacksecret',
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
@@ -74,8 +164,9 @@ export const login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
-        email: user.email
+        username: user.username,
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error) {
@@ -84,120 +175,117 @@ export const login = async (req, res) => {
   }
 };
 
-// Get user profile
-export const getUserProfile = async (req, res) => {
+// Verify token
+export const verifyToken = async (req, res) => {
   try {
-    const user = await User.findById(req.userId).select('-password');
+    const user = await User.findById(req.user.userId).select('-password');
+    res.status(200).json({ message: 'Token is valid', user });
+  } catch (error) {
+    console.error('Token verification error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get current user profile
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
-    console.error('Get user profile error:', error);
+    console.error('Get profile error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Request password reset
-export const forgotPassword = async (req, res) => {
+// Update user profile
+export const updateProfile = async (req, res) => {
   try {
-    const { email } = req.body;
-
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: 'User with this email does not exist' });
-    }
-
-    // Generate reset token
-    const resetToken = crypto.randomBytes(20).toString('hex');
-
-    // Set token data in user document
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
-
-    await user.save();
-
-    // In a production environment, you would send an email with the token
-    // For this demo, we'll just return the token in the response
-
-    res.json({
-      message: 'Password reset email sent',
-      // Note: In production, don't expose the token in the response
-      // This is just for demo purposes
-      resetToken: resetToken
-    });
-  } catch (error) {
-    console.error('Forgot password error:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-// Reset password using token
-export const resetPassword = async (req, res) => {
-  try {
-    const { token, password } = req.body;
-
-    // Find user with the reset token and check if token hasn't expired
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
+    const { username, email, phone } = req.body;
+    const user = await User.findById(req.user.userId);
 
     if (!user) {
-      return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update password and clear reset token fields
-    user.password = password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-
-    await user.save();
-
-    // Generate new JWT token
-    const jwtToken = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'fallbacksecret',
-      { expiresIn: '1d' }
-    );
-
-    res.json({
-      message: 'Password has been reset successfully',
-      token: jwtToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
+    // Check if email is being changed and is already in use
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ message: 'Email already in use' });
       }
+    }
+
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+
+    await user.save();
+
+    res.status(200).json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      role: user.role
     });
   } catch (error) {
-    console.error('Reset password error:', error);
+    console.error('Update profile error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Direct password reset (no token required)
-export const resetPasswordDirect = async (req, res) => {
+// Change password
+export const changePassword = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user.userId);
 
-    // Find user by email
-    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User with this email does not exist' });
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Verify current password
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
     }
 
     // Update password
     user.password = newPassword;
-
     await user.save();
 
-    res.json({
-      message: 'Password has been reset successfully'
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Upload profile picture (placeholder - integrate with Cloudinary)
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload a file' });
+    }
+
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update profile picture URL (from Cloudinary)
+    user.profilePicture = req.file.path; // Cloudinary URL
+    await user.save();
+
+    res.status(200).json({
+      message: 'Profile picture uploaded successfully',
+      profilePicture: user.profilePicture
     });
   } catch (error) {
-    console.error('Direct password reset error:', error);
+    console.error('Upload profile picture error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };

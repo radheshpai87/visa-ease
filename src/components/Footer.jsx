@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { Link } from 'react-router-dom';
 
 // SVG Icon Components
 const PlaneIcon = () => (
@@ -63,246 +64,149 @@ const Footer = forwardRef((props, ref) => {
         style={{
           backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
           backgroundSize: '30px 30px',
-          opacity: 0.15
+          opacity: 0.1
         }}
       />
 
-      {/* Enhanced background elements */}
-      <div className="absolute top-[10%] left-[5%]">
+      {/* Simplified decorative elements */}
+      <div className="absolute top-[10%] left-[5%] opacity-5">
         <svg className="w-32 h-32" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="45" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-          <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+          <circle cx="50" cy="50" r="45" stroke="white" strokeWidth="1" fill="none"/>
         </svg>
       </div>
 
-      {/* Additional small circles in top-left */}
-      <div className="absolute top-[25%] left-[12%]">
-        <svg className="w-16 h-16" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-        </svg>
-      </div>
-
-      <div className="absolute top-[20%] right-[8%]">
-        <svg className="w-24 h-24" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-        </svg>
-      </div>
-
-      {/* Additional circles on right */}
-      <div className="absolute top-[35%] right-[20%]">
-        <svg className="w-20 h-20" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-          <circle cx="50" cy="50" r="25" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-        </svg>
-      </div>
-
-      {/* New center-bottom circles */}
-      <div className="absolute bottom-[10%] left-[45%] -translate-x-1/2">
+      <div className="absolute bottom-[10%] right-[8%] opacity-5">
         <svg className="w-40 h-40" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-          <circle cx="50" cy="50" r="38" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
-        </svg>
-      </div>
-
-      {/* Additional small circles near center */}
-      <div className="absolute top-[45%] left-[30%]">
-        <svg className="w-16 h-16" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="1" fill="none" className="opacity-10"/>
+          <circle cx="50" cy="50" r="45" stroke="white" strokeWidth="1" fill="none"/>
         </svg>
       </div>
 
       {/* Floating planes */}
-      <div className="absolute bottom-[15%] left-[15%]">
-        <div className="opacity-10 rotate-45">
-          <PlaneIcon />
-        </div>
+      <div className="absolute bottom-[15%] left-[15%] opacity-10">
+        <PlaneIcon />
       </div>
 
-      <div className="absolute top-[40%] right-[15%]">
-        <div className="opacity-10 -rotate-45">
-          <PlaneIcon />
-        </div>
-      </div>
-
-      {/* Additional planes */}
-      <div className="absolute top-[25%] left-[40%]">
-        <div className="opacity-10 rotate-15">
-          <PlaneIcon />
-        </div>
-      </div>
-
-      <div className="absolute bottom-[40%] right-[25%]">
-        <div className="opacity-10 -rotate-15">
-          <PlaneIcon />
-        </div>
-      </div>
-
-      {/* New center-right plane */}
-      <div className="absolute top-[60%] right-[30%]">
-        <div className="opacity-10 rotate-90">
-          <PlaneIcon />
-        </div>
-      </div>
-
-      {/* Multiple Airplane Path Designs for enhanced visual effect */}
-      <div className="absolute bottom-0 left-0 w-32 h-32">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="opacity-10">
-          <path d="M10,90 Q40,40 90,10" stroke="white" fill="transparent" strokeWidth="2" />
-        </svg>
-      </div>
-      <div className="absolute top-0 right-0 w-32 h-32 rotate-180">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="opacity-10">
-          <path d="M10,90 Q40,40 90,10" stroke="white" fill="transparent" strokeWidth="2" />
-        </svg>
+      <div className="absolute top-[40%] right-[15%] opacity-10">
+        <PlaneIcon />
       </div>
       
       {/* Contact Info Bar */}
-      <div className="container mx-auto mb-8 border-b border-blue-800 pb-6">
-        <div className="flex flex-wrap justify-between items-center">
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">  
+      <div className="container mx-auto mb-8 border-b border-blue-800 pb-6 relative z-10">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4">
+          <a href="tel:+18884567890" className="flex items-center space-x-2 hover:text-red-400 transition-colors">  
             <PhoneIcon />
             <span>+1 (888) 456-7890</span>
-          </div>
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">
+          </a>
+          <a href="mailto:info@visaease.com" className="flex items-center space-x-2 hover:text-red-400 transition-colors">
             <EmailIcon />
-            <span>info@VisaEase.com</span>
-          </div>
+            <span>info@visaease.com</span>
+          </a>
           <div className="flex items-center space-x-2">
             <LocationIcon />
-            <span>123 Global Avenue, Suite 200, New York, NY 10001</span>
+            <span>New York, NY 10001</span>
           </div>
         </div>
       </div>
       
-      {/* Main Footer Content */}
-      <div className="container mx-auto">
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+      {/* Main Footer Content - Simplified */}
+      <div className="container mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          
           {/* Logo & Company Info */}
           <div className="flex flex-col space-y-4">
-            <div className="flex items-center space-x-2 mb-4">
+            <Link to="/" className="flex items-center space-x-2 mb-2 hover:opacity-80 transition-opacity">
               <div className="bg-red-600 p-2 rounded-md">
                 <PlaneIcon />
               </div>
               <span className="text-2xl font-bold">VisaEase</span>
-            </div>
-            <p className="text-lg">Your Global Journey Starts Here</p>
-            <p className="text-lg">Trusted Visa Experts</p>
-            <p className="text-sm mt-4">We've helped thousands of students and professionals achieve their international dreams since 2010. Our certified consultants provide personalized guidance for your unique situation.</p>
+            </Link>
+            <p className="text-sm text-gray-300 leading-relaxed">
+              Your trusted immigration partner since 2010. We help thousands of students and professionals achieve their international dreams with expert visa consultation services.
+            </p>
             
-            <div className="flex space-x-4 mt-6">
-              <div className="bg-blue-800 hover:bg-red-600 transition-colors p-3 rounded-full cursor-pointer">
-                <GlobeIcon />
-              </div>
-              <div className="bg-blue-800 hover:bg-red-600 transition-colors p-3 rounded-full cursor-pointer">
+            <div className="flex space-x-3 mt-4">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-blue-800 hover:bg-red-600 transition-colors p-3 rounded-full">
                 <FacebookIcon />
-              </div>
-              <div className="bg-blue-800 hover:bg-red-600 transition-colors p-3 rounded-full cursor-pointer">
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-blue-800 hover:bg-red-600 transition-colors p-3 rounded-full">
                 <InstagramIcon />
-              </div>
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="bg-blue-800 hover:bg-red-600 transition-colors p-3 rounded-full">
+                <GlobeIcon />
+              </a>
             </div>
-          </div>
-          
-          {/* Immigration Links */}
-          <div>
-            <h3 className="text-xl font-bold mb-6">Immigration</h3>
-            <ul className="space-y-4">
-              <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Take IELTS</a>
-              </li>
-              <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">PTE Coaching</a>
-              </li>
-              <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Sat Coaching</a>
-              </li>
-              <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Student Visa</a>
-              </li>
-              <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Work Visa</a>
-              </li>
-              <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Business Visa</a>
-              </li>
-            </ul>
           </div>
           
           {/* Quick Links */}
           <div>
             <h3 className="text-xl font-bold mb-6">Quick Links</h3>
-            <ul className="space-y-4">
+            <ul className="space-y-3">
               <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">About Us</a>
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/" className="hover:text-red-400 transition-colors">Home</Link>
               </li>
               <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Our Team</a>
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/about" className="hover:text-red-400 transition-colors">About Us</Link>
               </li>
               <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Our Coaching</a>
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/services" className="hover:text-red-400 transition-colors">Services</Link>
               </li>
               <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Our Countries</a>
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/contact" className="hover:text-red-400 transition-colors">Contact Us</Link>
               </li>
               <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">Testimonials</a>
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/blog" className="hover:text-red-400 transition-colors">Blog</Link>
               </li>
               <li className="flex items-center space-x-2 group">
-                <span className="text-red-600 group-hover:translate-x-1 transition-transform"><PlaneIcon /></span>
-                <a href="#" className="hover:text-gray-300">FAQ</a>
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/login" className="hover:text-red-400 transition-colors">Login / Register</Link>
               </li>
             </ul>
           </div>
           
           {/* Subscribe Section */}
           <div>
-            <h3 className="text-xl font-bold mb-6">Subscribe Our Newsletter</h3>
-            <p className="mb-4">Enter your email address to get latest updates and offers from us.</p>
-            <div className="flex mb-4">
+            <h3 className="text-xl font-bold mb-6">Stay Updated</h3>
+            <p className="mb-4 text-sm text-gray-300">Subscribe to receive the latest visa updates and immigration news.</p>
+            <form className="flex mb-6" onSubmit={(e) => { e.preventDefault(); alert('Thank you for subscribing!'); }}>
               <input 
                 type="email" 
                 placeholder="Enter your email" 
-                className="p-3 w-full bg-white text-gray-800 rounded-l focus:outline-none"
+                required
+                className="p-3 w-full bg-white text-gray-800 rounded-l focus:outline-none focus:ring-2 focus:ring-red-600"
               />
-              <button className="bg-white text-red-600 p-3 rounded-r hover:bg-red-600 hover:text-white transition-colors">
+              <button 
+                type="submit"
+                className="bg-red-600 text-white p-3 rounded-r hover:bg-red-700 transition-colors flex items-center justify-center px-4"
+              >
                 <ArrowForwardIcon />
               </button>
-            </div>
+            </form>
             
-            {/* Popular Destinations */}
-            <h4 className="font-bold mt-8 mb-4">Popular Destinations</h4>
+            {/* Popular Services */}
+            <h4 className="font-bold mb-3 text-sm">Popular Visa Types</h4>
             <div className="flex flex-wrap gap-2">
-              <span className="bg-blue-800 px-3 py-1 rounded-full text-sm hover:bg-red-600 transition-colors cursor-pointer">USA</span>
-              <span className="bg-blue-800 px-3 py-1 rounded-full text-sm hover:bg-red-600 transition-colors cursor-pointer">Canada</span>
-              <span className="bg-blue-800 px-3 py-1 rounded-full text-sm hover:bg-red-600 transition-colors cursor-pointer">UK</span>
-              <span className="bg-blue-800 px-3 py-1 rounded-full text-sm hover:bg-red-600 transition-colors cursor-pointer">Australia</span>
-              <span className="bg-blue-800 px-3 py-1 rounded-full text-sm hover:bg-red-600 transition-colors cursor-pointer">Germany</span>
+              <Link to="/services" className="bg-blue-800 px-3 py-1.5 rounded-full text-sm hover:bg-red-600 transition-colors">Student Visa</Link>
+              <Link to="/services" className="bg-blue-800 px-3 py-1.5 rounded-full text-sm hover:bg-red-600 transition-colors">Work Visa</Link>
+              <Link to="/services" className="bg-blue-800 px-3 py-1.5 rounded-full text-sm hover:bg-red-600 transition-colors">Tourist Visa</Link>
+              <Link to="/services" className="bg-blue-800 px-3 py-1.5 rounded-full text-sm hover:bg-red-600 transition-colors">Business Visa</Link>
             </div>
           </div>
         </div>
         
         {/* Bottom Section */}
-        <div className="border-t border-blue-800 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <div>
-            <p>Copyright © 2025 All Rights Reserved.</p>
-          </div>
+        <div className="border-t border-blue-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
+          <p className="text-gray-300">© 2025 VisaEase. All Rights Reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-          <a href="#" className="hover:text-red-600">Home</a>
-          <a href="#" className="hover:text-red-600">About Us</a>
-          <a href="#" className="hover:text-red-600">Contact Us</a>
-          <a href="#" className="hover:text-red-600">Privacy Policy</a>
-          <a href="#" className="hover:text-red-600">Terms & Conditions</a>
+            <Link to="/" className="hover:text-red-400 transition-colors">Home</Link>
+            <Link to="/about" className="hover:text-red-400 transition-colors">About</Link>
+            <Link to="/contact" className="hover:text-red-400 transition-colors">Contact</Link>
+            <a href="#privacy" className="hover:text-red-400 transition-colors">Privacy Policy</a>
+            <a href="#terms" className="hover:text-red-400 transition-colors">Terms</a>
           </div>
         </div>
       </div>

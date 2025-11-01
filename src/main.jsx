@@ -1,15 +1,32 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HashRouter } from 'react-router-dom'; // Import HashRouter
+import { BrowserRouter } from 'react-router-dom'; // Import BrowserRouter for clean URLs
 import { Analytics } from '@vercel/analytics/react'; // Import Vercel Analytics
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import App from './App.jsx';
 
+import { AuthProvider } from './context/AuthContext.jsx';
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HashRouter> {/* Wrap App with HashRouter for routing */}
-      <App />
-      <Analytics /> {/* Add the Vercel Analytics component */}
-    </HashRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+        <ToastContainer 
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <Analytics />
+      </AuthProvider>
+    </BrowserRouter>
   </StrictMode>
 );

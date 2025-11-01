@@ -1,24 +1,32 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config({ path: './server/.env' });
 
-const authMiddleware = (req, res, next) => {
-  // Get token from header
-  const token = req.header('x-auth-token');
-
-  // Check if no token
+// Protect: JWT authentication middleware
+export const protect = (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
-
   try {
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallbacksecret');
-    
-    // Add user id to request
-    req.userId = decoded.userId;
+    // Use globalThis.process for ESM compatibility
+  const decoded = jwt.verify(token, globalThis.process.env.JWT_SECRET);
+    req.user = decoded;
     next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ message: 'Token is not valid' });
   }
 };
 
-export default authMiddleware;
+// Authorize: Role-based access control
+export const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'User role not authorized' });
+    }
+    next();
+  };
+};
+
+// For legacy usage in /auth/verify
+export const authMiddleware = protect;
