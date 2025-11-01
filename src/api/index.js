@@ -1,6 +1,17 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+// Use environment variable or fallback to production URL
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://visa-ease-sandy.vercel.app/api';
+
+const API = axios.create({ 
+  baseURL,
+  timeout: 30000, // 30 second timeout for serverless functions
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+console.log('API Base URL:', baseURL);
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('token')) {
@@ -23,9 +34,9 @@ API.interceptors.response.use(
   }
 );
 
-export const login = (formData) => API.post('/api/auth/login', formData);
-export const register = (formData) => API.post('/api/auth/register', formData);
-export const verifyToken = () => API.get('/api/auth/verify');
+export const login = (formData) => API.post('/auth/login', formData);
+export const register = (formData) => API.post('/auth/register', formData);
+export const verifyToken = () => API.get('/auth/verify');
 
 // Export the axios instance as default
 export default API;
