@@ -2,6 +2,13 @@ import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import VisaApplication from '../models/VisaApplication.js';
 
+// Test mode flag - set to true to bypass Razorpay and auto-approve payments
+// Set to false for production with real Razorpay integration
+const TEST_MODE = process.env.PAYMENT_TEST_MODE === 'true';
+
+console.log(`💳 Payment Mode: ${TEST_MODE ? '🧪 TEST MODE (Auto-Approve)' : '💰 RAZORPAY MODE (Payment Portal)'}`);
+console.log(`   PAYMENT_TEST_MODE env: ${process.env.PAYMENT_TEST_MODE}`);
+
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -36,11 +43,49 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Payment already completed for this application' });
     }
 
+    // *** TEST MODE: Skip Razorpay and auto-approve ***
+    if (TEST_MODE) {
+      console.log('🧪 TEST MODE: Creating fake payment order');
+      
+      const fakeOrderId = `test_order_${Date.now()}`;
+      
+      // Update application with fake order details
+      application.payment = {
+        amount: amount,
+        currency: 'INR',
+        status: 'pending',
+        razorpay_order_id: fakeOrderId,
+        test_mode: true
+      };
+
+      await application.save();
+
+      console.log('✅ Test order created:', fakeOrderId);
+      console.log('================================\n');
+
+      return res.status(200).json({
+        success: true,
+        testMode: true,
+        order: {
+          id: fakeOrderId,
+          amount: amount * 100,
+          currency: 'INR'
+        },
+        key: 'test_key'
+      });
+    }
+
     // Create Razorpay order
+    // Generate a shorter receipt ID (max 40 chars)
+    // Format: rcpt_<last8ofAppId>_<timestamp>
+    const shortAppId = applicationId.slice(-8);
+    const timestamp = Date.now().toString().slice(-8);
+    const receiptId = `rcpt_${shortAppId}_${timestamp}`;
+    
     const options = {
       amount: amount * 100, // Convert to paise (smallest currency unit)
       currency: 'INR',
-      receipt: `receipt_${applicationId}_${Date.now()}`,
+      receipt: receiptId, // Max 40 characters
       notes: {
         applicationId: applicationId,
         userId: req.user.userId
@@ -101,6 +146,36 @@ export const verifyPayment = async (req, res) => {
     console.log('Order ID:', razorpay_order_id);
     console.log('Payment ID:', razorpay_payment_id);
     console.log('Application ID:', applicationId);
+
+    // Find application first
+    const application = await VisaApplication.findById(applicationId);
+    
+    if (!application) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
+
+    // *** TEST MODE: Auto-approve payment ***
+    if (TEST_MODE || razorpay_order_id?.startsWith('test_order_')) {
+      console.log('🧪 TEST MODE: Auto-approving payment');
+
+      application.payment.status = 'paid';
+      application.payment.razorpay_payment_id = razorpay_payment_id || `test_payment_${Date.now()}`;
+      application.payment.razorpay_signature = razorpay_signature || 'test_signature';
+      application.payment.paid_at = new Date();
+      application.payment.test_mode = true;
+
+      await application.save();
+
+      console.log('✅ Test payment auto-approved');
+      console.log('================================\n');
+
+      return res.status(200).json({
+        success: true,
+        testMode: true,
+        message: 'Payment verified successfully (Test Mode)',
+        application: application
+      });
+    }
 
     // Verify signature
     const sign = razorpay_order_id + '|' + razorpay_payment_id;

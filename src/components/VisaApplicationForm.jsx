@@ -223,16 +223,65 @@ const VisaApplicationForm = () => {
         amount
       });
 
-      const { order_id, amount: orderAmount, currency } = orderResponse.data;
+      const orderData = orderResponse.data;
+      console.log('Order response:', orderData);
+
+      // Check if in test mode
+      if (orderData.testMode) {
+        console.log('🧪 Test mode detected - auto-approving payment');
+        
+        // Simulate payment and verify immediately
+        try {
+          const verifyResponse = await axios.post('/payment/verify', {
+            razorpay_order_id: orderData.order.id,
+            razorpay_payment_id: `test_payment_${Date.now()}`,
+            razorpay_signature: 'test_signature',
+            applicationId
+          });
+
+          if (verifyResponse.data.success) {
+            toast.success('Payment successful! (Test Mode) Application submitted.');
+            navigate('/applicant-dashboard');
+          } else {
+            toast.error('Payment verification failed. Please contact support.');
+          }
+        } catch (error) {
+          console.error('Payment verification error:', error);
+          toast.error('Payment verification failed. Please contact support.');
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
+
+      // Normal Razorpay flow
+      // Check if Razorpay script is loaded
+      if (!window.Razorpay) {
+        toast.error('Payment system not loaded. Please refresh the page.');
+        setLoading(false);
+        return;
+      }
+
+      const { order, key } = orderData;
+
+      // Validate order data
+      if (!order || !order.id) {
+        console.error('Invalid order data:', orderData);
+        toast.error('Failed to initialize payment. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('Initializing Razorpay with order:', order.id);
 
       // Configure Razorpay checkout
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_demo', // Replace with your Razorpay key
-        amount: orderAmount,
-        currency: currency,
+        key: key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_demo',
+        amount: order.amount,
+        currency: order.currency,
         name: 'VisaEase',
         description: `Visa Application Fee - ${selectedVisaType.name}`,
-        order_id: order_id,
+        order_id: order.id,
         handler: async function (response) {
           try {
             // Verify payment
