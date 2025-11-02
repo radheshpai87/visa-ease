@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../api';
 import { toast } from 'react-toastify';
-import { FaUser, FaLock, FaCamera, FaEye, FaEyeSlash, FaSave, FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaUser, FaLock, FaCamera, FaEye, FaEyeSlash, FaSave, FaTimes, FaArrowLeft } from 'react-icons/fa';
 import zxcvbn from 'zxcvbn';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -171,6 +173,14 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-4 flex items-center gap-2 text-gray-600 hover:text-[#be0b32] transition-colors font-medium"
+        >
+          <FaArrowLeft /> Back
+        </button>
+        
         {/* Header */}
         <div className="bg-white rounded-t-2xl shadow-lg p-8 border-b-4 border-[#be0b32]">
           <div className="flex items-center gap-6">

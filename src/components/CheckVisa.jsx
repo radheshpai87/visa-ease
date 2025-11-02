@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const CheckVisa = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [applicationNumber, setApplicationNumber] = useState('');
   const [passportNumber, setPassportNumber] = useState('');
@@ -17,6 +20,14 @@ const CheckVisa = () => {
 
   return (
     <div className="w-full min-h-screen relative overflow-hidden bg-blue-900 flex items-center justify-center">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 text-white hover:text-gray-200 transition-colors font-medium bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm"
+      >
+        <FaArrowLeft /> Back to Home
+      </button>
+      
       {/* Base dot grid pattern with increased visibility */}
       <div className="absolute inset-0" 
            style={{

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AuthBackground from './AuthBackground';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaApple, FaEye, FaEyeSlash, FaUserShield } from "react-icons/fa";
+import { FaFacebook, FaApple, FaEye, FaEyeSlash, FaUserShield, FaHome } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import zxcvbn from 'zxcvbn';
@@ -126,7 +126,17 @@ const Login = () => {
 
   return (
     <AuthBackground>
-      <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row">
+      <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row relative">
+        {/* Home Button - Top Right */}
+        <button
+          onClick={() => navigate('/')}
+          className="absolute top-4 right-4 z-10 bg-white text-red-600 p-2 rounded-full shadow-lg hover:bg-red-50 transition-colors flex items-center gap-2 text-sm font-medium"
+          title="Go to Homepage"
+        >
+          <FaHome className="w-5 h-5" />
+          <span className="hidden sm:inline">Home</span>
+        </button>
+        
         {/* Left Side */}
         <div className="bg-blue-900 text-white p-8 md:w-2/5 flex flex-col justify-between relative">
           <div>

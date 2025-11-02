@@ -3,7 +3,7 @@ import axios from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
-import { FaUser, FaPassport, FaPlane, FaUpload, FaCheckCircle, FaTimesCircle, FaFileAlt, FaTrash } from 'react-icons/fa';
+import { FaUser, FaPassport, FaPlane, FaUpload, FaCheckCircle, FaTimesCircle, FaFileAlt, FaTrash, FaArrowLeft } from 'react-icons/fa';
 
 const VisaApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -246,6 +246,14 @@ const VisaApplicationForm = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
       <div className="max-w-4xl mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate('/applicant-dashboard')}
+          className="mb-4 flex items-center gap-2 text-gray-600 hover:text-[#be0b32] transition-colors font-medium"
+        >
+          <FaArrowLeft /> Back to Dashboard
+        </button>
+        
         {/* Header */}
         <div className="bg-white rounded-t-2xl shadow-lg p-8 border-b-4 border-[#be0b32]">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">New Visa Application</h1>
