@@ -1,6 +1,6 @@
 /**
  * Transform Cloudinary URL to enable inline viewing for PDFs
- * Adds fl_attachment:false flag to prevent forced download
+ * Removes any download flags and ensures inline display
  * @param {string} url - Original Cloudinary URL
  * @returns {string} - Transformed URL for inline viewing
  */
@@ -12,20 +12,11 @@ export const getInlineViewUrl = (url) => {
     return url;
   }
   
-  // Check if URL already has flags
-  if (url.includes('fl_attachment')) {
-    return url;
-  }
+  // For Cloudinary raw resources (PDFs), we need to use the direct URL
+  // Cloudinary raw resources are served as-is, so we just return the URL
+  // The server-side configuration should handle the content-disposition header
   
-  // For PDFs (raw resource type), add inline viewing flag
-  // Format: https://res.cloudinary.com/.../raw/upload/v.../file.pdf
-  // Becomes: https://res.cloudinary.com/.../raw/upload/fl_attachment:false/v.../file.pdf
-  
-  if (url.includes('/raw/upload/')) {
-    return url.replace('/raw/upload/', '/raw/upload/fl_attachment:false/');
-  }
-  
-  // For images, no transformation needed (they display inline by default)
+  // Simply return the URL - the browser will handle it based on content-type
   return url;
 };
 

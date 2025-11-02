@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import axios from '../api';
 import Papa from 'papaparse';
 import { toast } from 'react-toastify';
-import { getInlineViewUrl } from '../utils/cloudinary';
 import {
   FaCalendarAlt,
   FaSearch,
@@ -239,7 +238,7 @@ const ApplicationHistory = () => {
 
       documents.forEach((doc) => {
         const link = document.createElement('a');
-        link.href = getInlineViewUrl(doc.file_path);
+        link.href = doc.file_path;
         link.download = doc.file_name;
         link.target = '_blank';
         link.click();

@@ -49,10 +49,20 @@ export const storage = new CloudinaryStorage({
       public_id: `doc-${originalName}-${timestamp}`,
       resource_type: resourceType,
       allowed_formats: ['pdf', 'jpg', 'jpeg', 'png'],
-      // For PDFs, set flags to allow inline viewing instead of forcing download
-      flags: resourceType === 'raw' ? 'attachment:false' : undefined,
     };
   },
 });
+
+// Helper function to get URL for inline viewing
+export const getInlineUrl = (cloudinaryUrl) => {
+  if (!cloudinaryUrl || !cloudinaryUrl.includes('cloudinary.com')) {
+    return cloudinaryUrl;
+  }
+  
+  // For raw resources (PDFs), Cloudinary doesn't support fl_attachment transformation
+  // Instead, we need to use the URL as-is and let the browser handle it
+  // The browser will display PDFs inline based on the Content-Type header
+  return cloudinaryUrl;
+};
 
 export default cloudinary;
