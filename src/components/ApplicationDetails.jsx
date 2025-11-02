@@ -12,6 +12,36 @@ const ApplicationDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const handleViewDocument = async (docId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://visaeasehub.vercel.app/api'}/documents/view/${docId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load document');
+      }
+
+      // Get the blob from response
+      const blob = await response.blob();
+      
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(blob);
+      
+      // Open in new tab
+      window.open(url, '_blank');
+      
+      // Clean up the URL after a short delay
+      setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    } catch (error) {
+      console.error('Error viewing document:', error);
+      toast.error('Failed to load document');
+    }
+  };
+
   const fetchDetails = async () => {
     try {
       setLoading(true);
@@ -123,14 +153,12 @@ const ApplicationDetails = () => {
                         )}
                       </div>
                     </div>
-                    <a 
-                      href={`${import.meta.env.VITE_API_BASE_URL || 'https://visaeasehub.vercel.app/api'}/documents/view/${doc._id}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-[#be0b32] hover:text-[#8c0826] font-medium"
+                    <button 
+                      onClick={() => handleViewDocument(doc._id)}
+                      className="text-[#be0b32] hover:text-[#8c0826] font-medium cursor-pointer"
                     >
                       View
-                    </a>
+                    </button>
                   </div>
                 </div>
               ))}
