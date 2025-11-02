@@ -4,6 +4,8 @@ import ApplicationStatus from '../models/ApplicationStatus.js';
 import Applicant from '../models/Applicant.js';
 import Officer from '../models/Officer.js';
 import VisaType from '../models/VisaType.js';
+import Document from '../models/Document.js';
+import bcrypt from 'bcryptjs';
 
 // @desc    Get all users
 // @route   GET /api/admin/users
@@ -12,6 +14,64 @@ export const getUsers = async (req, res) => {
   try {
     const users = await User.find({}).select('-password');
     res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Create new user
+// @route   POST /api/admin/users
+// @access  Private (Admin)
+export const createUser = async (req, res) => {
+  try {
+    const { username, email, password, role, phone } = req.body;
+
+    // Check if user already exists
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists with this email or username' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const user = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role,
+      phone
+    });
+
+    // Create corresponding profile
+    if (role === 'applicant') {
+      await Applicant.create({
+        user_id: user._id,
+        first_name: username,
+        last_name: '',
+        date_of_birth: new Date(),
+        nationality: 'Unknown',
+        passport_number: 'PENDING',
+        phone: phone || ''
+      });
+    } else if (role === 'officer') {
+      await Officer.create({
+        user_id: user._id,
+        first_name: username,
+        last_name: '',
+        employee_id: `EMP${Date.now()}`,
+        department: 'General'
+      });
+    }
+
+    res.status(201).json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      phone: user.phone
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -194,6 +254,152 @@ export const getAuditLogs = async (req, res) => {
     }));
 
     res.status(200).json(logs);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Get all applications (Admin view)
+// @route   GET /api/admin/applications
+// @access  Private (Admin)
+export const getAllApplications = async (req, res) => {
+  try {
+    const applications = await VisaApplication.find()
+      .populate('applicant_id', 'first_name last_name passport_number')
+      .populate('type_id', 'name fee')
+      .populate('status_id', 'name description')
+      .sort({ application_date: -1 });
+    
+    res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Delete an application
+// @route   DELETE /api/admin/applications/:id
+// @access  Private (Admin)
+export const deleteApplication = async (req, res) => {
+  try {
+    const application = await VisaApplication.findById(req.params.id);
+    
+    if (!application) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
+
+    // Delete associated documents
+    await Document.deleteMany({ application_id: application._id });
+    
+    await VisaApplication.deleteOne({ _id: application._id });
+    res.status(200).json({ message: 'Application and associated documents removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Get all visa types
+// @route   GET /api/admin/visa-types
+// @access  Private (Admin)
+export const getAllVisaTypes = async (req, res) => {
+  try {
+    const visaTypes = await VisaType.find().sort({ name: 1 });
+    res.status(200).json(visaTypes);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Create visa type
+// @route   POST /api/admin/visa-types
+// @access  Private (Admin)
+export const createVisaType = async (req, res) => {
+  try {
+    const { name, fee, duration_days, required_docs_list } = req.body;
+    
+    const visaType = await VisaType.create({
+      name,
+      fee,
+      duration_days,
+      required_docs_list: required_docs_list || []
+    });
+    
+    res.status(201).json(visaType);
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).json({ message: 'Visa type with this name already exists' });
+    } else {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  }
+};
+
+// @desc    Update visa type
+// @route   PUT /api/admin/visa-types/:id
+// @access  Private (Admin)
+export const updateVisaType = async (req, res) => {
+  try {
+    const { name, fee, duration_days, required_docs_list } = req.body;
+    
+    const visaType = await VisaType.findById(req.params.id);
+    
+    if (!visaType) {
+      return res.status(404).json({ message: 'Visa type not found' });
+    }
+    
+    visaType.name = name || visaType.name;
+    visaType.fee = fee !== undefined ? fee : visaType.fee;
+    visaType.duration_days = duration_days || visaType.duration_days;
+    visaType.required_docs_list = required_docs_list || visaType.required_docs_list;
+    
+    const updatedVisaType = await visaType.save();
+    res.status(200).json(updatedVisaType);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Delete visa type
+// @route   DELETE /api/admin/visa-types/:id
+// @access  Private (Admin)
+export const deleteVisaType = async (req, res) => {
+  try {
+    const visaType = await VisaType.findById(req.params.id);
+    
+    if (!visaType) {
+      return res.status(404).json({ message: 'Visa type not found' });
+    }
+    
+    // Check if any applications use this visa type
+    const applicationsCount = await VisaApplication.countDocuments({ type_id: visaType._id });
+    if (applicationsCount > 0) {
+      return res.status(400).json({ 
+        message: `Cannot delete visa type. ${applicationsCount} application(s) are using this visa type.` 
+      });
+    }
+    
+    await VisaType.deleteOne({ _id: visaType._id });
+    res.status(200).json({ message: 'Visa type removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    Get all documents
+// @route   GET /api/admin/documents
+// @access  Private (Admin)
+export const getAllDocuments = async (req, res) => {
+  try {
+    const documents = await Document.find()
+      .populate({
+        path: 'application_id',
+        populate: [
+          { path: 'applicant_id', select: 'first_name last_name passport_number' },
+          { path: 'type_id', select: 'name' }
+        ]
+      })
+      .sort({ upload_date: -1 });
+    
+    res.status(200).json(documents);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
