@@ -9,7 +9,7 @@ import {
 } from 'recharts';
 import { 
   FaUsers, FaFileAlt, FaCheckCircle, FaUserTie, FaUserShield,
-  FaEdit, FaTrash, FaSearch, FaPlus, FaTimes, FaSignOutAlt 
+  FaEdit, FaTrash, FaSearch, FaPlus, FaTimes, FaSignOutAlt, FaUser 
 } from 'react-icons/fa';
 
 const AdminDashboard = () => {
@@ -122,13 +122,22 @@ const AdminDashboard = () => {
             <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
             <p className="text-purple-100">Manage users, view analytics, and monitor system activity</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40"
-          >
-            <FaSignOutAlt className="text-lg" />
-            <span className="font-semibold">Logout</span>
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/profile')}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40"
+            >
+              <FaUser className="text-lg" />
+              <span className="font-semibold">Profile</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40"
+            >
+              <FaSignOutAlt className="text-lg" />
+              <span className="font-semibold">Logout</span>
+            </button>
+          </div>
         </div>
       </div>
 

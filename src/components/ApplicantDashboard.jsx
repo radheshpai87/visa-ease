@@ -3,7 +3,7 @@ import axios from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaSearch, FaSignOutAlt } from 'react-icons/fa';
+import { FaFileAlt, FaClock, FaCheckCircle, FaTimesCircle, FaSearch, FaSignOutAlt, FaUser } from 'react-icons/fa';
 
 const ApplicantDashboard = () => {
   const { user, logout } = useAuth();
@@ -98,13 +98,22 @@ const ApplicantDashboard = () => {
             <h1 className="text-4xl font-bold mb-2">Welcome back, {user?.username}!</h1>
             <p className="text-gray-100">Manage your visa applications and track their progress</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40"
-          >
-            <FaSignOutAlt className="text-lg" />
-            <span className="font-semibold">Logout</span>
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/profile')}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40"
+            >
+              <FaUser className="text-lg" />
+              <span className="font-semibold">Profile</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40"
+            >
+              <FaSignOutAlt className="text-lg" />
+              <span className="font-semibold">Logout</span>
+            </button>
+          </div>
         </div>
       </div>
 
