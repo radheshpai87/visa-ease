@@ -43,9 +43,14 @@ export const storage = new CloudinaryStorage({
     const timestamp = Date.now();
     const originalName = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_');
     
+    // For PDFs (raw resources), include the extension in the public_id
+    const publicId = mimeType === 'application/pdf' 
+      ? `doc-${originalName}-${timestamp}.pdf`
+      : `doc-${originalName}-${timestamp}`;
+    
     const params = {
       folder: 'visa_documents',
-      public_id: `doc-${originalName}-${timestamp}`,
+      public_id: publicId,
       resource_type: resourceType,
       allowed_formats: ['pdf', 'jpg', 'jpeg', 'png'],
     };
@@ -54,6 +59,8 @@ export const storage = new CloudinaryStorage({
     if (resourceType === 'image') {
       params.format = format;
     }
+    
+    console.log('Cloudinary upload - Public ID:', publicId);
     
     return params;
   },
