@@ -12,49 +12,6 @@ const ApplicationDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleViewDocument = async (docId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://visaeasehub.vercel.app/api'}/documents/view/${docId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to load document');
-      }
-
-      // Get content type from response headers
-      const contentType = response.headers.get('content-type');
-      
-      // Get the blob from response with correct type
-      const blob = await response.blob();
-      const blobWithType = new Blob([blob], { type: contentType });
-      
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(blobWithType);
-      
-      // Open in new tab
-      const newWindow = window.open(url, '_blank');
-      
-      // If popup was blocked, show error
-      if (!newWindow) {
-        toast.error('Please allow pop-ups to view documents');
-        window.URL.revokeObjectURL(url);
-        return;
-      }
-      
-      // Clean up the URL after window is loaded
-      newWindow.onload = () => {
-        setTimeout(() => window.URL.revokeObjectURL(url), 1000);
-      };
-    } catch (error) {
-      console.error('Error viewing document:', error);
-      toast.error('Failed to load document');
-    }
-  };
-
   const fetchDetails = async () => {
     try {
       setLoading(true);
@@ -166,12 +123,14 @@ const ApplicationDetails = () => {
                         )}
                       </div>
                     </div>
-                    <button 
-                      onClick={() => handleViewDocument(doc._id)}
+                    <a 
+                      href={doc.file_path}
+                      target="_blank" 
+                      rel="noopener noreferrer"
                       className="text-[#be0b32] hover:text-[#8c0826] font-medium cursor-pointer"
                     >
                       View
-                    </button>
+                    </a>
                   </div>
                 </div>
               ))}
