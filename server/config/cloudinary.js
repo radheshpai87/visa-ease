@@ -43,13 +43,19 @@ export const storage = new CloudinaryStorage({
     const timestamp = Date.now();
     const originalName = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_');
     
-    return {
+    const params = {
       folder: 'visa_documents',
-      format: format,
       public_id: `doc-${originalName}-${timestamp}`,
       resource_type: resourceType,
       allowed_formats: ['pdf', 'jpg', 'jpeg', 'png'],
     };
+    
+    // Only add format for images, not for raw resources (PDFs)
+    if (resourceType === 'image') {
+      params.format = format;
+    }
+    
+    return params;
   },
 });
 

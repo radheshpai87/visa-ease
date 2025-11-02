@@ -32,10 +32,21 @@ export const uploadDocument = async (req, res) => {
       return res.status(400).json({ message: 'Application ID is required' });
     }
 
+    // For PDFs, ensure the URL has the .pdf extension for proper browser viewing
+    let filePath = req.file.path;
+    const isPDF = req.file.mimetype === 'application/pdf';
+    
+    if (isPDF && !filePath.endsWith('.pdf')) {
+      // Cloudinary raw resources don't include extension, add it
+      filePath = filePath + '.pdf';
+    }
+    
+    console.log('Final file path:', filePath);
+
     const newDocument = new Document({
       application_id,
       document_type: document_type || 'general',
-      file_path: req.file.path, // URL from Cloudinary
+      file_path: filePath, // URL from Cloudinary with extension
       file_name: req.file.originalname, // Store original filename
     });
 
