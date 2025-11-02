@@ -124,7 +124,7 @@ const ApplicationDetails = () => {
                       </div>
                     </div>
                     <a 
-                      href={doc.file_path} 
+                      href={`${import.meta.env.VITE_API_BASE_URL || 'https://visaeasehub.vercel.app/api'}/documents/view/${doc._id}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="text-[#be0b32] hover:text-[#8c0826] font-medium"

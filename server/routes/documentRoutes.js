@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadDocument, getDocumentsByApplication, deleteDocument } from '../controllers/documentController.js';
+import { uploadDocument, getDocumentsByApplication, viewDocument, deleteDocument } from '../controllers/documentController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 import { storage } from '../config/cloudinary.js';
 
@@ -64,6 +64,9 @@ router.route('/upload')
 
 router.route('/:applicationId')
   .get(protect, getDocumentsByApplication);
+
+router.route('/view/:id')
+  .get(protect, viewDocument);
 
 router.route('/delete/:id')
   .delete(protect, authorize('applicant', 'admin'), deleteDocument);

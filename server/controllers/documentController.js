@@ -1,4 +1,5 @@
 import Document from '../models/Document.js';
+import axios from 'axios';
 
 // @desc    Upload a document for an application
 // @route   POST /api/documents/upload
@@ -35,6 +36,7 @@ export const uploadDocument = async (req, res) => {
       application_id,
       document_type: document_type || 'general',
       file_path: req.file.path, // URL from Cloudinary
+      file_name: req.file.originalname, // Store original filename
     });
 
     const savedDocument = await newDocument.save();
@@ -62,6 +64,42 @@ export const getDocumentsByApplication = async (req, res) => {
     const documents = await Document.find({ application_id: req.params.applicationId });
     res.status(200).json(documents);
   } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc    View/Download a document with proper headers
+// @route   GET /api/documents/view/:id
+// @access  Private
+export const viewDocument = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    // Fetch the file from Cloudinary
+    const response = await axios.get(document.file_path, {
+      responseType: 'arraybuffer'
+    });
+
+    // Determine content type
+    const isPDF = document.file_path.toLowerCase().includes('.pdf');
+    const contentType = isPDF ? 'application/pdf' : 'image/jpeg';
+    
+    // Get original filename or create one
+    const filename = document.file_name || `document-${document._id}.${isPDF ? 'pdf' : 'jpg'}`;
+
+    // Set headers for inline viewing
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    
+    // Send the file
+    res.send(Buffer.from(response.data));
+  } catch (error) {
+    console.error('Error viewing document:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
