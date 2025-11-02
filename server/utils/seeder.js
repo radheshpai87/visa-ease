@@ -53,28 +53,28 @@ const importData = async () => {
     const officerUsers = createdUsers.filter((user) => user.role === 'officer');
     const applicantUsers = createdUsers.filter((user) => user.role === 'applicant');
 
-    // Create Applicants with more sample data
+    // Create Applicants with Indian sample data
     const applicants = [
       {
         user_id: applicantUsers[0]._id,
-        full_name: 'John Doe',
-        passport_number: 'A12345678',
-        nationality: 'American',
-        address: '123 Main St, Anytown, NY 10001, USA'
+        full_name: 'Raj Kumar Sharma',
+        passport_number: 'L1234567',
+        nationality: 'Indian',
+        address: 'A-123, Lajpat Nagar, New Delhi, Delhi 110024, India'
       },
       {
         user_id: applicantUsers[1]._id,
-        full_name: 'Sarah Johnson',
-        passport_number: 'B98765432',
-        nationality: 'Canadian',
-        address: '456 Oak Ave, Toronto, ON M5H 2N2, Canada'
+        full_name: 'Priya Patel',
+        passport_number: 'M9876543',
+        nationality: 'Indian',
+        address: '45/B, Koregaon Park, Pune, Maharashtra 411001, India'
       },
       {
         user_id: applicantUsers[2]._id,
-        full_name: 'Michael Chen',
-        passport_number: 'C11223344',
-        nationality: 'Chinese',
-        address: '789 Beijing Road, Shanghai 200001, China'
+        full_name: 'Arjun Reddy',
+        passport_number: 'N5544332',
+        nationality: 'Indian',
+        address: '78, MG Road, Bangalore, Karnataka 560001, India'
       }
     ];
 
@@ -85,12 +85,12 @@ const importData = async () => {
     const officers = [
       {
         user_id: officerUsers[0]._id,
-        full_name: 'Jane Smith',
+        full_name: 'Sanjay Gupta',
         department: 'Tourist Visa Processing'
       },
       {
         user_id: officerUsers[1]._id,
-        full_name: 'Robert Williams',
+        full_name: 'Meera Singh',
         department: 'Student Visa Processing'
       }
     ];
@@ -98,35 +98,35 @@ const importData = async () => {
     const createdOfficers = await Officer.insertMany(officers);
     console.log('Officers created...');
 
-    // Create Visa Types
+    // Create Visa Types (Indian Rupees pricing)
     const visaTypes = [
       { 
         name: 'Tourist', 
-        fee: 160, 
+        fee: 12000, // ₹12,000 (~$145 USD)
         duration_days: 90, 
         required_docs_list: ['Passport Copy', 'Passport Photo', 'Travel Itinerary', 'Hotel Booking', 'Bank Statement'] 
       },
       { 
         name: 'Student', 
-        fee: 200, 
+        fee: 15000, // ₹15,000 (~$180 USD)
         duration_days: 365, 
         required_docs_list: ['Passport Copy', 'Passport Photo', 'I-20 Form', 'Acceptance Letter', 'Financial Proof', 'Academic Transcripts'] 
       },
       { 
         name: 'Work', 
-        fee: 190, 
+        fee: 18000, // ₹18,000 (~$215 USD)
         duration_days: 730, 
         required_docs_list: ['Passport Copy', 'Passport Photo', 'Job Offer Letter', 'Company Letter', 'Resume', 'Educational Certificates'] 
       },
       { 
         name: 'Business', 
-        fee: 180, 
+        fee: 16000, // ₹16,000 (~$190 USD)
         duration_days: 180, 
         required_docs_list: ['Passport Copy', 'Passport Photo', 'Business Invitation Letter', 'Company Registration', 'Bank Statement'] 
       },
       { 
         name: 'Transit', 
-        fee: 100, 
+        fee: 8000, // ₹8,000 (~$95 USD)
         duration_days: 7, 
         required_docs_list: ['Passport Copy', 'Passport Photo', 'Flight Tickets', 'Final Destination Visa'] 
       }

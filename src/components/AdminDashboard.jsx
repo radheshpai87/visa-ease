@@ -754,7 +754,7 @@ const AdminDashboard = () => {
                                 </span>
                               </td>
                               <td className="px-6 py-4 text-gray-700 text-sm">
-                                {new Date(app.application_date).toLocaleDateString()}
+                                {new Date(app.application_date).toLocaleDateString('en-IN')}
                               </td>
                               <td className="px-6 py-4">
                                 <div className="flex gap-2">
@@ -925,7 +925,7 @@ const AdminDashboard = () => {
                               </td>
                               <td className="px-6 py-4 text-gray-700 font-medium">{doc.application_id?.type_id?.name}</td>
                               <td className="px-6 py-4 text-gray-700 text-sm">
-                                {new Date(doc.upload_date).toLocaleDateString()}
+                                {new Date(doc.upload_date).toLocaleDateString('en-IN')}
                               </td>
                               <td className="px-6 py-4">
                                 <span className={`px-3 py-1 text-xs font-bold rounded-full border-2 ${
@@ -998,7 +998,14 @@ const AdminDashboard = () => {
                               </p>
                               <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
                                 <FaCalendarAlt className="text-purple-600" />
-                                {log.created_at ? new Date(log.created_at).toLocaleString() : 'Recent'}
+                                {log.created_at ? new Date(log.created_at).toLocaleString('en-IN', { 
+                                  day: '2-digit', 
+                                  month: '2-digit', 
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: true
+                                }) : 'Recent'}
                               </p>
                             </div>
                           </div>

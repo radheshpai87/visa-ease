@@ -366,22 +366,23 @@ const OfficerDashboard = () => {
                         </td>
                         <td className="px-6 py-5">
                           <div className="text-sm font-medium text-gray-900">
-                            {app.application_date ? new Date(app.application_date).toLocaleDateString('en-US', { 
+                            {app.application_date ? new Date(app.application_date).toLocaleDateString('en-IN', { 
                               year: 'numeric', 
                               month: 'short', 
                               day: 'numeric' 
                             }) : '-'}
                           </div>
                           <div className="text-xs text-gray-500">
-                            {app.application_date ? new Date(app.application_date).toLocaleTimeString('en-US', { 
+                            {app.application_date ? new Date(app.application_date).toLocaleTimeString('en-IN', { 
                               hour: '2-digit', 
-                              minute: '2-digit'
+                              minute: '2-digit',
+                              hour12: true
                             }) : ''}
                           </div>
                         </td>
                         <td className="px-6 py-5">
                           <div className="text-sm font-medium text-gray-900">
-                            {app.appointment_date ? new Date(app.appointment_date).toLocaleDateString('en-US', { 
+                            {app.appointment_date ? new Date(app.appointment_date).toLocaleDateString('en-IN', { 
                               year: 'numeric', 
                               month: 'short', 
                               day: 'numeric' 

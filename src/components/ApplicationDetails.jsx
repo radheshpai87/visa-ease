@@ -78,7 +78,7 @@ const ApplicationDetails = () => {
             <div>
               <p className="text-sm text-gray-500">Appointment Date</p>
               <p className="font-semibold">
-                {application.appointment_date ? new Date(application.appointment_date).toLocaleDateString() : '-'}
+                {application.appointment_date ? new Date(application.appointment_date).toLocaleDateString('en-IN') : '-'}
               </p>
             </div>
             <div>
@@ -156,7 +156,7 @@ const ApplicationDetails = () => {
                       {rev.decision}
                     </span>
                     <p className="text-sm text-gray-500">
-                      {rev.review_date ? new Date(rev.review_date).toLocaleDateString() : '-'}
+                      {rev.review_date ? new Date(rev.review_date).toLocaleDateString('en-IN') : '-'}
                     </p>
                   </div>
                   <p className="text-sm text-gray-600 mb-1">

@@ -166,3 +166,6 @@ node_modules/.vite/
 # Personal notes or files
 notes.md
 TODO.md
+
+#Code Counter files
+.VSCodeCounter/

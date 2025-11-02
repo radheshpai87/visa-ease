@@ -10,6 +10,11 @@ const visaTypeSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  currency: {
+    type: String,
+    default: 'INR',
+    enum: ['INR', 'USD', 'EUR', 'GBP']
+  },
   duration_days: {
     type: Number,
     required: true
