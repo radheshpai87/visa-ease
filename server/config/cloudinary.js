@@ -49,6 +49,8 @@ export const storage = new CloudinaryStorage({
       public_id: `doc-${originalName}-${timestamp}`,
       resource_type: resourceType,
       allowed_formats: ['pdf', 'jpg', 'jpeg', 'png'],
+      // For PDFs, set flags to allow inline viewing instead of forcing download
+      flags: resourceType === 'raw' ? 'attachment:false' : undefined,
     };
   },
 });

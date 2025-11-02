@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getInlineViewUrl } from '../utils/cloudinary';
 import DocumentUpload from './DocumentUpload';
 
 const ApplicationDetails = () => {
@@ -124,7 +125,7 @@ const ApplicationDetails = () => {
                       </div>
                     </div>
                     <a 
-                      href={doc.file_path} 
+                      href={getInlineViewUrl(doc.file_path)} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="text-[#be0b32] hover:text-[#8c0826] font-medium"
