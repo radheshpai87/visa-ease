@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaUserShield, FaEye, FaEyeSlash, FaLock, FaEnvelope, FaUser, FaPhone, FaKey, FaHome } from 'react-icons/fa';
+import AuthBackground from './AuthBackground';
+import { FaUserShield, FaEye, FaEyeSlash, FaLock, FaEnvelope, FaUser, FaPhone, FaKey, FaHome, FaShieldAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from '../api/axios';
@@ -145,75 +146,136 @@ const AdminAuth = () => {
   };
 
   const getPasswordStrengthText = () => {
-    const texts = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+    const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
     return texts[passwordStrength.score] || 'No Password';
   };
 
+  const ShieldIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5" viewBox="0 0 24 24">
+      <path fillRule="evenodd" d="M12.516 2.17a.75.75 0 0 0-1.032 0 11.209 11.209 0 0 1-7.877 3.08.75.75 0 0 0-.722.515A12.74 12.74 0 0 0 2.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 0 0 .374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 0 0-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08Zm3.094 8.016a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
+    </svg>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-4xl relative">
-        {/* Home Button - Top Right Corner */}
-        <button
-          onClick={() => navigate('/')}
-          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-gray-100"
-          title="Go to Homepage"
-        >
-          <FaHome className="w-6 h-6" />
-        </button>
-        
-        {/* Header */}
-        <div className="bg-gradient-to-r from-red-600 via-red-700 to-purple-700 p-8 text-white">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <FaUserShield className="text-5xl" />
-            <h2 className="text-4xl font-bold">Admin Portal</h2>
+    <AuthBackground>
+      <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row relative">
+        {/* Left Side - Admin Themed */}
+        <div className="bg-gradient-to-br from-purple-900 via-purple-800 to-red-900 text-white p-8 md:w-2/5 flex flex-col justify-between relative overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <img src="/favicon.png" alt="VisaEase Logo" className="w-10 h-10" />
+                <span className="text-2xl font-bold tracking-wide">VisaEase</span>
+              </div>
+              {/* Home Button beside logo */}
+              <button
+                onClick={() => navigate('/')}
+                className="text-white/80 hover:text-white hover:bg-white/10 transition-all p-2 rounded-full"
+                title="Go to Homepage"
+              >
+                <FaHome className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                <FaUserShield className="text-yellow-300 text-xl" />
+                <span className="text-sm font-semibold">Administrator Portal</span>
+              </div>
+              <h2 className="text-3xl font-bold mb-3">Secure Admin Access</h2>
+              <p className="text-purple-100 mb-6">
+                Manage the entire VisaEase platform with complete administrative control and oversight.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-6">
+              <h3 className="font-semibold mb-3 flex items-center gap-2">
+                <FaShieldAlt className="text-yellow-300" />
+                Admin Privileges
+              </h3>
+              <ul className="text-sm text-purple-100 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-300 mt-0.5">✦</span>
+                  <span>Full System Management</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-300 mt-0.5">✦</span>
+                  <span>User & Application Control</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-300 mt-0.5">✦</span>
+                  <span>Analytics & Audit Logs</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-300 mt-0.5">✦</span>
+                  <span>Visa Type Configuration</span>
+                </li>
+              </ul>
+            </div>
           </div>
-          <p className="text-center text-red-100 text-lg">Secure Administrator Access</p>
+
+          <div className="relative z-10 mt-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+              <p className="text-xs text-purple-100 flex items-center gap-2">
+                <FaLock className="text-yellow-300" />
+                <span>All admin actions are logged and monitored for security</span>
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => {
-              setActiveTab('login');
-              setError('');
-            }}
-            className={`flex-1 py-4 text-lg font-semibold transition-all ${
-              activeTab === 'login'
-                ? 'text-red-600 border-b-4 border-red-600 bg-red-50'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <FaLock className="inline mr-2" />
-            Admin Login
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab('register');
-              setError('');
-            }}
-            className={`flex-1 py-4 text-lg font-semibold transition-all ${
-              activeTab === 'register'
-                ? 'text-red-600 border-b-4 border-red-600 bg-red-50'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <FaUserShield className="inline mr-2" />
-            Admin Register
-          </button>
-        </div>
+        {/* Right Side - Form */}
+        <div className="p-8 md:w-3/5 relative">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-800">
+              {activeTab === 'login' ? 'Admin Sign In' : 'Create Admin Account'}
+            </h3>
+            <div className="flex space-x-2">
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeTab === 'login' 
+                    ? 'bg-gradient-to-r from-purple-600 to-red-600 text-white shadow-lg' 
+                    : 'text-gray-500 hover:bg-gray-100'
+                }`}
+                onClick={() => {
+                  setActiveTab('login');
+                  setError('');
+                }}
+              >
+                Login
+              </button>
+              <button
+                type="button"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeTab === 'register' 
+                    ? 'bg-gradient-to-r from-purple-600 to-red-600 text-white shadow-lg' 
+                    : 'text-gray-500 hover:bg-gray-100'
+                }`}
+                onClick={() => {
+                  setActiveTab('register');
+                  setError('');
+                }}
+              >
+                Register
+              </button>
+            </div>
+          </div>
 
-        {/* Content */}
-        <div className="p-8">
           {/* Warning Banner */}
-          <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
-            <div className="flex items-start">
-              <FaUserShield className="text-yellow-600 text-xl mr-3 mt-1" />
+          <div className="mb-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 rounded-r-xl">
+            <div className="flex items-start gap-3">
+              <FaUserShield className="text-yellow-600 text-xl mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-yellow-800">⚠️ Administrator Access Only</p>
-                <p className="text-sm text-yellow-700 mt-1">
+                <p className="font-semibold text-yellow-800 text-sm">⚠️ Authorized Access Only</p>
+                <p className="text-xs text-yellow-700 mt-1">
                   {activeTab === 'login' 
                     ? 'Only authorized administrators can access this portal.'
-                    : 'You must have a valid admin secret key to create an administrator account.'}
+                    : 'Valid admin secret key required for registration.'}
                 </p>
               </div>
             </div>
@@ -221,43 +283,45 @@ const AdminAuth = () => {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-r-lg mb-6">
-              <p className="font-semibold">Error</p>
-              <p className="text-sm">{error}</p>
+            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-r-xl mb-6 animate-pulse">
+              <p className="font-semibold text-sm">Error</p>
+              <p className="text-xs mt-1">{error}</p>
             </div>
           )}
 
           {/* Login Form */}
           {activeTab === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label htmlFor="login-email" className="block text-sm font-semibold text-gray-700 mb-2">
-                  <FaEnvelope className="inline mr-2 text-red-600" />
-                  Admin Email Address
+                <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
                 </label>
-                <input
-                  id="login-email"
-                  type="email"
-                  name="email"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
-                  placeholder="admin@visaease.com"
-                  value={loginData.email}
-                  onChange={handleLoginChange}
-                  required
-                />
+                <div className="relative">
+                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    id="login-email"
+                    type="email"
+                    name="email"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                    placeholder="admin@visaease.com"
+                    value={loginData.email}
+                    onChange={handleLoginChange}
+                    required
+                  />
+                </div>
               </div>
 
               <div>
-                <label htmlFor="login-password" className="block text-sm font-semibold text-gray-700 mb-2">
-                  <FaLock className="inline mr-2 text-red-600" />
+                <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
                 <div className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     id="login-password"
                     type={showPassword ? 'text' : 'password'}
                     name="password"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all pr-12"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
                     placeholder="Enter your password"
                     value={loginData.password}
                     onChange={handleLoginChange}
@@ -266,7 +330,7 @@ const AdminAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
                   >
                     {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                   </button>
@@ -276,97 +340,103 @@ const AdminAuth = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-4 rounded-lg font-semibold text-white text-lg transition-all ${
+                className={`w-full py-3 rounded-lg font-medium text-white text-base transition-all flex items-center justify-center gap-2 ${
                   loading
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 transform hover:scale-[1.02] active:scale-[0.98]'
+                    : 'bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-700 hover:to-red-700 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg'
                 }`}
               >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Logging in...
-                  </span>
-                ) : (
-                  'Login as Admin'
-                )}
+                <span>{loading ? 'Signing in...' : 'Sign In as Admin'}</span>
+                {!loading && <ShieldIcon />}
               </button>
 
-              <div className="text-center text-sm text-gray-600">
-                <p>Don't have an admin account? <button type="button" onClick={() => setActiveTab('register')} className="text-red-600 hover:text-red-700 font-semibold">Register here</button></p>
+              <div className="text-center mt-4">
+                <p className="text-sm text-gray-600">
+                  Don't have an admin account?{' '}
+                  <button 
+                    type="button" 
+                    onClick={() => setActiveTab('register')} 
+                    className="text-purple-600 hover:text-purple-700 font-semibold hover:underline"
+                  >
+                    Register here
+                  </button>
+                </p>
               </div>
             </form>
           )}
 
           {/* Register Form */}
           {activeTab === 'register' && (
-            <form onSubmit={handleRegister} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
-                    <FaUser className="inline mr-2 text-red-600" />
-                    Username *
+                  <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                    Username
                   </label>
-                  <input
-                    id="username"
-                    type="text"
-                    name="username"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
-                    placeholder="Choose a username"
-                    value={registerData.username}
-                    onChange={handleRegisterChange}
-                    required
-                  />
+                  <div className="relative">
+                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      id="username"
+                      type="text"
+                      name="username"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                      placeholder="Choose a username"
+                      value={registerData.username}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                    <FaEnvelope className="inline mr-2 text-red-600" />
-                    Email Address *
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address
                   </label>
-                  <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
-                    placeholder="admin@visaease.com"
-                    value={registerData.email}
-                    onChange={handleRegisterChange}
-                    required
-                  />
+                  <div className="relative">
+                    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                      placeholder="admin@visaease.com"
+                      value={registerData.email}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
-                  <FaPhone className="inline mr-2 text-red-600" />
-                  Phone Number (Optional)
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  name="phone"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
-                  placeholder="+91 9876543210"
-                  value={registerData.phone}
-                  onChange={handleRegisterChange}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                  <FaLock className="inline mr-2 text-red-600" />
-                  Password *
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number <span className="text-gray-400 text-xs">(Optional)</span>
                 </label>
                 <div className="relative">
+                  <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    id="phone"
+                    type="tel"
+                    name="phone"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                    placeholder="+91 9876543210"
+                    value={registerData.phone}
+                    onChange={handleRegisterChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     name="password"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all pr-12"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
                     placeholder="Create a strong password"
                     value={registerData.password}
                     onChange={handleRegisterChange}
@@ -375,7 +445,7 @@ const AdminAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
                   >
                     {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                   </button>
@@ -383,10 +453,10 @@ const AdminAuth = () => {
                 
                 {/* Password Strength Indicator */}
                 {registerData.password && (
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Password Strength:</span>
-                      <span className={`text-sm font-semibold ${
+                  <div className="mt-2">
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="text-gray-600">Password Strength:</span>
+                      <span className={`font-medium ${
                         passwordStrength.score < 2 ? 'text-red-600' : 
                         passwordStrength.score < 4 ? 'text-yellow-600' : 'text-green-600'
                       }`}>
@@ -400,23 +470,23 @@ const AdminAuth = () => {
                       />
                     </div>
                     {passwordStrength.feedback && (
-                      <p className="text-xs text-gray-600 mt-2">{passwordStrength.feedback}</p>
+                      <p className="text-xs text-gray-600 mt-1">{passwordStrength.feedback}</p>
                     )}
                   </div>
                 )}
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
-                  <FaLock className="inline mr-2 text-red-600" />
-                  Confirm Password *
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  Confirm Password
                 </label>
                 <div className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
                     name="confirmPassword"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all pr-12"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
                     placeholder="Re-enter your password"
                     value={registerData.confirmPassword}
                     onChange={handleRegisterChange}
@@ -425,27 +495,28 @@ const AdminAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
                   >
                     {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                   </button>
                 </div>
                 {registerData.confirmPassword && registerData.password !== registerData.confirmPassword && (
-                  <p className="text-red-600 text-sm mt-2">Passwords do not match</p>
+                  <p className="text-red-600 text-xs mt-2">Passwords do not match</p>
                 )}
               </div>
 
-              <div className="border-t-2 border-dashed border-gray-300 pt-5">
-                <label htmlFor="adminSecretKey" className="block text-sm font-semibold text-gray-700 mb-2">
-                  <FaKey className="inline mr-2 text-red-600" />
-                  Admin Secret Key *
+              <div className="border-t-2 border-dashed border-gray-300 pt-4 mt-4">
+                <label htmlFor="adminSecretKey" className="block text-sm font-medium text-gray-700 mb-2">
+                  <FaKey className="inline mr-1 text-purple-600" />
+                  Admin Secret Key
                 </label>
                 <div className="relative">
+                  <FaKey className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     id="adminSecretKey"
                     type={showSecretKey ? 'text' : 'password'}
                     name="adminSecretKey"
-                    className="w-full px-4 py-3 border-2 border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all pr-12 bg-red-50"
+                    className="w-full pl-10 pr-12 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all bg-purple-50"
                     placeholder="Enter admin secret key"
                     value={registerData.adminSecretKey}
                     onChange={handleRegisterChange}
@@ -454,53 +525,47 @@ const AdminAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowSecretKey(!showSecretKey)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
                   >
                     {showSecretKey ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                   </button>
                 </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  ⚠️ This key is required to create an administrator account. Contact your system administrator for access.
+                <p className="text-xs text-gray-500 mt-2 flex items-start gap-1">
+                  <span>⚠️</span>
+                  <span>Contact your system administrator for the admin secret key.</span>
                 </p>
               </div>
 
               <button
                 type="submit"
                 disabled={loading || passwordStrength.score < 2}
-                className={`w-full py-4 rounded-lg font-semibold text-white text-lg transition-all ${
+                className={`w-full py-3 rounded-lg font-medium text-white text-base transition-all flex items-center justify-center gap-2 ${
                   loading || passwordStrength.score < 2
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-700 hover:to-purple-700 transform hover:scale-[1.02] active:scale-[0.98]'
+                    : 'bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-700 hover:to-red-700 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg'
                 }`}
               >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Creating Account...
-                  </span>
-                ) : (
-                  'Create Admin Account'
-                )}
+                <span>{loading ? 'Creating Account...' : 'Create Admin Account'}</span>
+                {!loading && <ShieldIcon />}
               </button>
 
-              <div className="text-center text-sm text-gray-600">
-                <p>Already have an account? <button type="button" onClick={() => setActiveTab('login')} className="text-red-600 hover:text-red-700 font-semibold">Login here</button></p>
+              <div className="text-center mt-4">
+                <p className="text-sm text-gray-600">
+                  Already have an account?{' '}
+                  <button 
+                    type="button" 
+                    onClick={() => setActiveTab('login')} 
+                    className="text-purple-600 hover:text-purple-700 font-semibold hover:underline"
+                  >
+                    Login here
+                  </button>
+                </p>
               </div>
             </form>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
-          <p className="text-center text-xs text-gray-600">
-            🔒 Secure Connection • All administrator actions are logged for security purposes
-          </p>
-        </div>
       </div>
-    </div>
+    </AuthBackground>
   );
 };
 
