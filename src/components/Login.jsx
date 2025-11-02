@@ -130,9 +130,19 @@ const Login = () => {
         {/* Left Side */}
         <div className="bg-blue-900 text-white p-8 md:w-2/5 flex flex-col justify-between relative">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <img src="/favicon.png" alt="VisaEase Logo" className="w-10 h-10" />
-              <span className="text-2xl font-bold tracking-wide">VisaEase</span>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <img src="/favicon.png" alt="VisaEase Logo" className="w-10 h-10" />
+                <span className="text-2xl font-bold tracking-wide">VisaEase</span>
+              </div>
+              {/* Home Button beside logo */}
+              <button
+                onClick={() => navigate('/')}
+                className="text-white/80 hover:text-white hover:bg-white/10 transition-all p-2 rounded-full"
+                title="Go to Homepage"
+              >
+                <FaHome className="w-5 h-5" />
+              </button>
             </div>
             <h2 className="text-2xl font-bold mb-2">Welcome to VisaEase</h2>
             <p className="text-gray-200 mb-6">Your trusted partner for global mobility. Apply, track, and manage your visa applications with ease.</p>
@@ -148,15 +158,6 @@ const Login = () => {
         </div>
         {/* Right Side */}
         <div className="p-8 md:w-3/5 relative">
-          {/* Home Button - Top Right Corner */}
-          <button
-            onClick={() => navigate('/')}
-            className="absolute top-4 right-4 text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-gray-100"
-            title="Go to Homepage"
-          >
-            <FaHome className="w-6 h-6" />
-          </button>
-          
           <div className="flex justify-between items-center mb-8">
             <h3 className="text-2xl font-bold text-gray-800">
               {formType === 'login' ? 'Welcome Back' : 'Create Account'}
