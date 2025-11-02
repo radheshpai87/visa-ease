@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-// Get API base URL from environment variable (without /api suffix since routes include it)
-const envURL = import.meta.env.VITE_API_BASE_URL || 'https://visa-ease-sandy.vercel.app/api';
-// Remove /api from the end if present, since our routes already include /api/
-const baseURL = envURL.replace(/\/api\/?$/, '');
+// Get API base URL from environment variable and remove /api suffix
+// Frontend routes already include /api/ prefix
+let baseURL = import.meta.env.VITE_API_BASE_URL || 'https://visa-ease-sandy.vercel.app/api';
+// Remove /api from the end to avoid double /api/api/
+baseURL = baseURL.replace(/\/api\/?$/, '');
 
 console.log('Axios instance Base URL:', baseURL);
 
