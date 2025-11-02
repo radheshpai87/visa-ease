@@ -44,7 +44,7 @@ const AdminRegister = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post('/api/auth/admin-register', formData);
+      const { data } = await axios.post('/auth/admin-register', formData);
       
       // Store token
       localStorage.setItem('token', data.token);

@@ -27,8 +27,8 @@ const ApplicantDashboard = () => {
       try {
         setLoading(true);
         const [appsRes, statsRes] = await Promise.all([
-          axios.get('/api/applicant/applications'),
-          axios.get('/api/applicant/statistics')
+          axios.get('/applicant/applications'),
+          axios.get('/applicant/statistics')
         ]);
         setApplications(appsRes.data);
         setFilteredApplications(appsRes.data);

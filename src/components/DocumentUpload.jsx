@@ -21,7 +21,7 @@ const DocumentUpload = ({ applicationId, onUpload }) => {
     setUploading(true);
     setProgress(0);
     try {
-      await axios.post('/api/documents/upload', formData, {
+      await axios.post('/documents/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e) => {
           setProgress(Math.round((e.loaded * 100) / e.total));

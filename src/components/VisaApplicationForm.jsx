@@ -36,7 +36,7 @@ const VisaApplicationForm = () => {
   useEffect(() => {
     const fetchVisaTypes = async () => {
       try {
-        const response = await axios.get('/api/visa-types');
+        const response = await axios.get('/visa-types');
         setVisaTypes(response.data);
       } catch {
         toast.error('Failed to load visa types');
@@ -158,7 +158,7 @@ const VisaApplicationForm = () => {
 
     try {
       // First, create the application
-      const applicationResponse = await axios.post('/api/applications', {
+      const applicationResponse = await axios.post('/applications', {
         type_id: formData.type_id,
         appointment_date: formData.appointment_date,
         notes: formData.notes || `Purpose: ${formData.purpose_of_travel}. Travel dates: ${formData.intended_arrival_date} to ${formData.intended_departure_date || 'TBD'}`
@@ -192,7 +192,7 @@ const VisaApplicationForm = () => {
           
           console.log(`Sending upload request for: ${file.name}, type: ${docType}`);
           
-          const response = await axios.post('/api/documents/upload', formDataUpload, {
+          const response = await axios.post('/documents/upload', formDataUpload, {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
           

@@ -28,8 +28,8 @@ const OfficerDashboard = () => {
       try {
         setLoading(true);
         const [appsRes, statsRes] = await Promise.all([
-          axios.get('/api/officer/applications'),
-          axios.get('/api/officer/statistics')
+          axios.get('/officer/applications'),
+          axios.get('/officer/statistics')
         ]);
         setApplications(appsRes.data);
         setFilteredApplications(appsRes.data);

@@ -121,7 +121,7 @@ const AdminAuth = () => {
 
     try {
       // Register admin user
-      const { data } = await axios.post('/api/auth/admin-register', registerData);
+      const { data } = await axios.post('/auth/admin-register', registerData);
       
       // Store token and user data
       localStorage.setItem('token', data.token);

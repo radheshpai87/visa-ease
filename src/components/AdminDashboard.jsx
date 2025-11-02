@@ -39,9 +39,9 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
       const [statsRes, usersRes, auditRes] = await Promise.all([
-        axios.get('/api/admin/statistics'),
-        axios.get('/api/admin/users'),
-        axios.get('/api/admin/audit-logs')
+        axios.get('/admin/statistics'),
+        axios.get('/admin/users'),
+        axios.get('/admin/audit-logs')
       ]);
       
       setStatistics(statsRes.data);
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     
     try {
-      await axios.delete(`/api/admin/users/${id}`);
+      await axios.delete(`/admin/users/${id}`);
       setUsers(users.filter(u => u._id !== id));
       toast.success('User deleted successfully');
       fetchData(); // Refresh audit logs
@@ -77,7 +77,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     
     try {
-      await axios.put(`/api/admin/users/${editingUser._id}`, {
+      await axios.put(`/admin/users/${editingUser._id}`, {
         username: editingUser.username,
         email: editingUser.email,
         role: editingUser.role,

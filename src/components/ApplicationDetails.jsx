@@ -16,9 +16,9 @@ const ApplicationDetails = () => {
     try {
       setLoading(true);
       const [appRes, docRes, revRes] = await Promise.all([
-        axios.get(`/api/applications/${id}`),
-        axios.get(`/api/documents/${id}`),
-        axios.get(`/api/reviews?application_id=${id}`)
+        axios.get(`/applications/${id}`),
+        axios.get(`/documents/${id}`),
+        axios.get(`/reviews?application_id=${id}`)
       ]);
       setApplication(appRes.data);
       setDocuments(docRes.data);

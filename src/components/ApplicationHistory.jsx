@@ -52,8 +52,8 @@ const ApplicationHistory = () => {
     try {
       setLoading(true);
       const [appsRes, typesRes] = await Promise.all([
-        axios.get('/api/applicant/applications'),
-        axios.get('/api/visa-types'),
+        axios.get('/applicant/applications'),
+        axios.get('/visa-types'),
       ]);
       setApplications(appsRes.data);
       setVisaTypes(typesRes.data);
@@ -228,7 +228,7 @@ const ApplicationHistory = () => {
 
   const downloadDocuments = async (applicationId) => {
     try {
-      const response = await axios.get(`/api/documents/${applicationId}`);
+      const response = await axios.get(`/documents/${applicationId}`);
       const documents = response.data;
 
       if (documents.length === 0) {

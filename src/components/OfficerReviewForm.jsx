@@ -14,7 +14,7 @@ const OfficerReviewForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('/api/reviews', {
+      await axios.post('/reviews', {
         application_id: id,
         decision,
         remarks

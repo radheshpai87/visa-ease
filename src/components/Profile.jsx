@@ -51,7 +51,7 @@ const Profile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get('/api/auth/me');
+      const response = await axios.get('/auth/me');
       setProfileData({
         username: response.data.username || '',
         email: response.data.email || '',
@@ -77,7 +77,7 @@ const Profile = () => {
     setLoading(true);
 
     try {
-      await axios.put('/api/auth/update-profile', {
+      await axios.put('/auth/update-profile', {
         username: profileData.username,
         email: profileData.email,
         phone: profileData.phone
@@ -107,7 +107,7 @@ const Profile = () => {
     setLoading(true);
 
     try {
-      await axios.put('/api/auth/change-password', {
+      await axios.put('/auth/change-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       });
@@ -146,7 +146,7 @@ const Profile = () => {
     formData.append('profilePicture', file);
 
     try {
-      const response = await axios.post('/api/auth/upload-profile-picture', formData, {
+      const response = await axios.post('/auth/upload-profile-picture', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setProfilePicture(response.data.profilePicture);
