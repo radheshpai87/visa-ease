@@ -3,6 +3,7 @@ import VisaApplication from '../models/VisaApplication.js';
 import ApplicationStatus from '../models/ApplicationStatus.js';
 import Applicant from '../models/Applicant.js';
 import Officer from '../models/Officer.js';
+import VisaType from '../models/VisaType.js';
 
 // @desc    Get all users
 // @route   GET /api/admin/users

@@ -1,6 +1,7 @@
 import VisaApplication from '../models/VisaApplication.js';
 import Applicant from '../models/Applicant.js';
 import ApplicationStatus from '../models/ApplicationStatus.js';
+import VisaType from '../models/VisaType.js';
 
 // @desc    Get applicant statistics
 // @route   GET /api/applicant/statistics

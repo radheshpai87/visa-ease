@@ -1,6 +1,8 @@
 import VisaApplication from '../models/VisaApplication.js';
 import Officer from '../models/Officer.js';
 import ApplicationStatus from '../models/ApplicationStatus.js';
+import VisaType from '../models/VisaType.js';
+import Applicant from '../models/Applicant.js';
 
 // @desc    Get applications assigned to logged-in officer
 // @route   GET /api/officer/applications
