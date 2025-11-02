@@ -11,6 +11,7 @@ import adminRoutes from '../server/routes/adminRoutes.js';
 import reviewRoutes from '../server/routes/reviewRoutes.js';
 import officerRoutes from '../server/routes/officerRoutes.js';
 import applicantRoutes from '../server/routes/applicantRoutes.js';
+import paymentRoutes from '../server/routes/paymentRoutes.js';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://visa-ease-sandy.vercel.app', /\.vercel\.app$/]
+    ? ['https://visaeasehub.vercel.app', /\.vercel\.app$/]
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
@@ -107,6 +108,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/officer', officerRoutes);
 app.use('/api/applicant', applicantRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Visa Types route (simple implementation)
 app.get('/api/visa-types', async (req, res) => {
