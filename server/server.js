@@ -10,6 +10,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import officerRoutes from './routes/officerRoutes.js';
 import applicantRoutes from './routes/applicantRoutes.js';
 import visaTypeRoutes from './routes/visaTypeRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -40,6 +41,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/officer', officerRoutes);
 app.use('/api/applicant', applicantRoutes);
 app.use('/api/visa-types', visaTypeRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Basic route for testing
 app.get('/api', (req, res) => {

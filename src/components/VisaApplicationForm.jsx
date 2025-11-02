@@ -204,12 +204,80 @@ const VisaApplicationForm = () => {
         console.log('All uploads completed:', uploadResults.map(r => r.data));
       }
 
-      toast.success('Application submitted successfully!');
-      navigate('/applicant-dashboard');
+      // Initiate payment process
+      toast.info('Processing payment...');
+      
+      // Get visa type fee from the selected visa type
+      const selectedVisaType = visaTypes.find(type => type._id === formData.type_id);
+      const amount = selectedVisaType?.fee || 0;
+
+      if (amount <= 0) {
+        toast.error('Invalid visa fee. Please contact support.');
+        setLoading(false);
+        return;
+      }
+
+      // Create Razorpay order
+      const orderResponse = await axios.post('/payment/create-order', {
+        applicationId,
+        amount
+      });
+
+      const { order_id, amount: orderAmount, currency } = orderResponse.data;
+
+      // Configure Razorpay checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_demo', // Replace with your Razorpay key
+        amount: orderAmount,
+        currency: currency,
+        name: 'VisaEase',
+        description: `Visa Application Fee - ${selectedVisaType.name}`,
+        order_id: order_id,
+        handler: async function (response) {
+          try {
+            // Verify payment
+            const verifyResponse = await axios.post('/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              applicationId
+            });
+
+            if (verifyResponse.data.success) {
+              toast.success('Payment successful! Application submitted.');
+              navigate('/applicant-dashboard');
+            } else {
+              toast.error('Payment verification failed. Please contact support.');
+            }
+          } catch (error) {
+            console.error('Payment verification error:', error);
+            toast.error('Payment verification failed. Please contact support.');
+          } finally {
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: formData.full_name,
+          email: '', // Add user email if available
+          contact: '' // Add user phone if available
+        },
+        theme: {
+          color: '#9333ea' // Purple color matching your theme
+        },
+        modal: {
+          ondismiss: function() {
+            toast.warning('Payment cancelled. Your application is saved but not submitted.');
+            setLoading(false);
+          }
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+
     } catch (error) {
       console.error('Submission error:', error);
       toast.error(error.response?.data?.message || 'Failed to submit application');
-    } finally {
       setLoading(false);
     }
   };

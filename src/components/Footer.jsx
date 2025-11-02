@@ -110,7 +110,7 @@ const Footer = forwardRef((props, ref) => {
       
       {/* Main Footer Content - Simplified */}
       <div className="container mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           
           {/* Logo & Company Info */}
           <div className="flex flex-col space-y-4">
@@ -168,6 +168,29 @@ const Footer = forwardRef((props, ref) => {
             </ul>
           </div>
           
+          {/* Policies */}
+          <div>
+            <h3 className="text-xl font-bold mb-6">Policies</h3>
+            <ul className="space-y-3">
+              <li className="flex items-center space-x-2 group">
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/privacy-policy" className="hover:text-red-400 transition-colors">Privacy Policy</Link>
+              </li>
+              <li className="flex items-center space-x-2 group">
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/terms-conditions" className="hover:text-red-400 transition-colors">Terms & Conditions</Link>
+              </li>
+              <li className="flex items-center space-x-2 group">
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/refund-policy" className="hover:text-red-400 transition-colors">Refund Policy</Link>
+              </li>
+              <li className="flex items-center space-x-2 group">
+                <span className="text-red-600 group-hover:translate-x-1 transition-transform text-sm"><PlaneIcon /></span>
+                <Link to="/shipping-policy" className="hover:text-red-400 transition-colors">Shipping Policy</Link>
+              </li>
+            </ul>
+          </div>
+          
           {/* Subscribe Section */}
           <div>
             <h3 className="text-xl font-bold mb-6">Stay Updated</h3>
@@ -205,8 +228,10 @@ const Footer = forwardRef((props, ref) => {
             <Link to="/" className="hover:text-red-400 transition-colors">Home</Link>
             <Link to="/about" className="hover:text-red-400 transition-colors">About</Link>
             <Link to="/contact" className="hover:text-red-400 transition-colors">Contact</Link>
-            <a href="#privacy" className="hover:text-red-400 transition-colors">Privacy Policy</a>
-            <a href="#terms" className="hover:text-red-400 transition-colors">Terms</a>
+            <Link to="/privacy-policy" className="hover:text-red-400 transition-colors">Privacy Policy</Link>
+            <Link to="/terms-conditions" className="hover:text-red-400 transition-colors">Terms</Link>
+            <Link to="/refund-policy" className="hover:text-red-400 transition-colors">Refund</Link>
+            <Link to="/shipping-policy" className="hover:text-red-400 transition-colors">Shipping</Link>
           </div>
         </div>
       </div>

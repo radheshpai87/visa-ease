@@ -223,6 +223,59 @@ const ApplicationDetails = () => {
                     {application.notes || 'No additional notes'}
                   </p>
                 </div>
+
+                {/* Payment Status */}
+                <div className="md:col-span-2 group">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FaCheckCircle className={application.payment?.status === 'paid' ? 'text-green-500' : 'text-yellow-500'} />
+                    <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Payment Status</p>
+                  </div>
+                  <div className="ml-6 bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-200">
+                    <div className="flex items-center justify-between flex-wrap gap-3">
+                      <div>
+                        <p className="text-lg font-bold text-gray-800 mb-1">
+                          <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold ${
+                            application.payment?.status === 'paid' 
+                              ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white' 
+                              : application.payment?.status === 'failed'
+                              ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white'
+                              : 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white'
+                          }`}>
+                            {application.payment?.status === 'paid' && <FaCheckCircle />}
+                            {application.payment?.status === 'failed' && <FaTimesCircle />}
+                            {(!application.payment?.status || application.payment?.status === 'pending') && <FaClock />}
+                            {application.payment?.status?.toUpperCase() || 'PENDING'}
+                          </span>
+                        </p>
+                        {application.payment?.paid_at && (
+                          <p className="text-sm text-gray-600 mt-2">
+                            Paid on: {new Date(application.payment.paid_at).toLocaleDateString('en-IN', { 
+                              day: '2-digit', 
+                              month: 'short', 
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                          ₹{application.payment?.amount?.toLocaleString('en-IN') || application.type_id?.fee?.toLocaleString('en-IN') || '0'}
+                        </p>
+                        <p className="text-sm text-gray-500 font-medium">{application.payment?.currency || 'INR'}</p>
+                      </div>
+                    </div>
+                    {application.payment?.razorpay_payment_id && (
+                      <div className="mt-3 pt-3 border-t border-blue-300">
+                        <p className="text-xs text-gray-600">
+                          <span className="font-semibold">Transaction ID:</span> 
+                          <span className="font-mono ml-1">{application.payment.razorpay_payment_id}</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 

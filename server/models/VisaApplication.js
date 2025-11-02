@@ -29,6 +29,33 @@ const visaApplicationSchema = new mongoose.Schema({
   },
   notes: {
     type: String
+  },
+  payment: {
+    amount: {
+      type: Number,
+      default: 0
+    },
+    currency: {
+      type: String,
+      default: 'INR'
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'paid', 'failed', 'refunded'],
+      default: 'pending'
+    },
+    razorpay_order_id: {
+      type: String
+    },
+    razorpay_payment_id: {
+      type: String
+    },
+    razorpay_signature: {
+      type: String
+    },
+    paid_at: {
+      type: Date
+    }
   }
 }, { timestamps: true });
 

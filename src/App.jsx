@@ -30,6 +30,10 @@ import AdminAuth from './components/AdminAuth';
 import Profile from './components/Profile';
 import ApplicationHistory from './components/ApplicationHistory';
 import NotFound from './components/NotFound';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsConditions from './components/TermsConditions';
+import RefundPolicy from './components/RefundPolicy';
+import ShippingPolicy from './components/ShippingPolicy';
 
 const App = () => {
   const footerRef = useRef(null);
@@ -211,6 +215,37 @@ const App = () => {
           <Footer ref={footerRef} />
         </div>
       } />
+      
+      {/* Policy Pages */}
+      <Route path="/privacy-policy" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <PrivacyPolicy />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="/terms-conditions" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <TermsConditions />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="/refund-policy" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <RefundPolicy />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      <Route path="/shipping-policy" element={
+        <div data-scroll-container>
+          <Navbar scrollToFooter={scrollToFooter} />
+          <ShippingPolicy />
+          <Footer ref={footerRef} />
+        </div>
+      } />
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
