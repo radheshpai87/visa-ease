@@ -12,7 +12,8 @@ import {
   createVisaType,
   updateVisaType,
   deleteVisaType,
-  getAllDocuments
+  getAllDocuments,
+  deleteDocument
 } from '../controllers/adminController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
@@ -53,5 +54,8 @@ router.route('/visa-types/:id')
 // Document Management Routes
 router.route('/documents')
   .get(protect, authorize('admin'), getAllDocuments);
+
+router.route('/documents/:id')
+  .delete(protect, authorize('admin'), deleteDocument);
 
 export default router;

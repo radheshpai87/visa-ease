@@ -404,3 +404,21 @@ export const getAllDocuments = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+// @desc    Delete a document
+// @route   DELETE /api/admin/documents/:id
+// @access  Private (Admin)
+export const deleteDocument = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+    
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+    
+    await Document.deleteOne({ _id: document._id });
+    res.status(200).json({ message: 'Document removed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};

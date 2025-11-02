@@ -206,6 +206,18 @@ const AdminDashboard = () => {
     }
   };
 
+  // Document Management
+  const handleDeleteDocument = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this document?')) return;
+    try {
+      await axios.delete(`/admin/documents/${id}`);
+      toast.success('Document deleted successfully');
+      fetchData();
+    } catch (error) {
+      toast.error('Failed to delete document');
+    }
+  };
+
   // Filter users
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -804,14 +816,22 @@ const AdminDashboard = () => {
                                 </span>
                               </td>
                               <td className="px-6 py-4">
-                                <a
-                                  href={doc.file_path}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                                >
-                                  <FaEye /> View
-                                </a>
+                                <div className="flex items-center gap-2">
+                                  <a
+                                    href={doc.file_path}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                                  >
+                                    <FaEye /> View
+                                  </a>
+                                  <button
+                                    onClick={() => handleDeleteDocument(doc._id)}
+                                    className="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                                  >
+                                    <FaTrash /> Delete
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))
