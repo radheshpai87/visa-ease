@@ -157,7 +157,7 @@ const AdminDashboard = () => {
   };
 
   const handleViewApplication = (id) => {
-    navigate(`/application/${id}`);
+    navigate(`/applications/${id}`);
   };
 
   // Visa Type Management
@@ -825,7 +825,9 @@ const AdminDashboard = () => {
                         <div className="relative z-10">
                           <div className="flex justify-between items-start mb-4">
                             <h4 className="text-xl font-bold text-gray-800">{type.name}</h4>
-                            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">${type.fee}</span>
+                            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                              ₹{type.fee.toLocaleString('en-IN')}
+                            </span>
                           </div>
                           <div className="space-y-3 mb-6">
                             <div className="flex items-center gap-2">

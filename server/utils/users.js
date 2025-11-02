@@ -1,45 +1,45 @@
 const users = [
   {
-    username: 'admin',
-    email: 'admin@example.com',
+    username: 'admin_visa',
+    email: 'admin@visaease.in',
     password: '123456',
     role: 'admin',
-    phone: '111-111-1111'
+    phone: '+91 98765 43210'
   },
   {
-    username: 'officer1',
-    email: 'officer@example.com',
+    username: 'sanjay_officer',
+    email: 'sanjay.gupta@visaease.in',
     password: '123456',
     role: 'officer',
-    phone: '222-222-2222'
+    phone: '+91 98765 12345'
   },
   {
-    username: 'officer2',
-    email: 'officer2@example.com',
+    username: 'meera_officer',
+    email: 'meera.singh@visaease.in',
     password: '123456',
     role: 'officer',
-    phone: '222-222-3333'
+    phone: '+91 98765 67890'
   },
   {
-    username: 'applicant',
-    email: 'applicant@example.com',
+    username: 'raj_sharma',
+    email: 'raj.sharma@gmail.com',
     password: '123456',
     role: 'applicant',
-    phone: '333-333-3333'
+    phone: '+91 98123 45678'
   },
   {
-    username: 'sarah_j',
-    email: 'sarah@example.com',
+    username: 'priya_patel',
+    email: 'priya.patel@gmail.com',
     password: '123456',
     role: 'applicant',
-    phone: '333-333-4444'
+    phone: '+91 98234 56789'
   },
   {
-    username: 'michael_c',
-    email: 'michael@example.com',
+    username: 'arjun_reddy',
+    email: 'arjun.reddy@gmail.com',
     password: '123456',
     role: 'applicant',
-    phone: '333-333-5555'
+    phone: '+91 98345 67890'
   }
 ];
 
