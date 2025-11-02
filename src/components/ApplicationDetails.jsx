@@ -25,17 +25,30 @@ const ApplicationDetails = () => {
         throw new Error('Failed to load document');
       }
 
-      // Get the blob from response
+      // Get content type from response headers
+      const contentType = response.headers.get('content-type');
+      
+      // Get the blob from response with correct type
       const blob = await response.blob();
+      const blobWithType = new Blob([blob], { type: contentType });
       
       // Create a URL for the blob
-      const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blobWithType);
       
       // Open in new tab
-      window.open(url, '_blank');
+      const newWindow = window.open(url, '_blank');
       
-      // Clean up the URL after a short delay
-      setTimeout(() => window.URL.revokeObjectURL(url), 100);
+      // If popup was blocked, show error
+      if (!newWindow) {
+        toast.error('Please allow pop-ups to view documents');
+        window.URL.revokeObjectURL(url);
+        return;
+      }
+      
+      // Clean up the URL after window is loaded
+      newWindow.onload = () => {
+        setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      };
     } catch (error) {
       console.error('Error viewing document:', error);
       toast.error('Failed to load document');

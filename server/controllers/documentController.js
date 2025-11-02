@@ -84,20 +84,28 @@ export const viewDocument = async (req, res) => {
       responseType: 'arraybuffer'
     });
 
-    // Determine content type
+    // Determine content type from the response or file path
     const isPDF = document.file_path.toLowerCase().includes('.pdf');
-    const contentType = isPDF ? 'application/pdf' : 'image/jpeg';
+    let contentType = response.headers['content-type'] || (isPDF ? 'application/pdf' : 'image/jpeg');
     
     // Get original filename or create one
     const filename = document.file_name || `document-${document._id}.${isPDF ? 'pdf' : 'jpg'}`;
 
+    console.log('Serving document:', {
+      id: document._id,
+      filename,
+      contentType,
+      size: response.data.byteLength || response.data.length
+    });
+
     // Set headers for inline viewing
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+    res.setHeader('Content-Length', response.data.byteLength || response.data.length);
     res.setHeader('Cache-Control', 'public, max-age=31536000');
     
-    // Send the file
-    res.send(Buffer.from(response.data));
+    // Send the file buffer directly
+    res.send(response.data);
   } catch (error) {
     console.error('Error viewing document:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
