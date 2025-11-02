@@ -134,3 +134,25 @@ export const deleteDocument = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+// @desc    Verify a document
+// @route   PATCH /api/documents/:id
+// @access  Private (Officer, Admin)
+export const verifyDocument = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    document.verified = req.body.verified !== undefined ? req.body.verified : true;
+    const updatedDocument = await document.save();
+
+    console.log(`Document ${document._id} verification status updated to:`, document.verified);
+    res.status(200).json(updatedDocument);
+  } catch (error) {
+    console.error('Error verifying document:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};

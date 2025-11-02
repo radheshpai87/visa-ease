@@ -395,15 +395,9 @@ const OfficerDashboard = () => {
                           <div className="flex gap-2">
                             <Link
                               to={`/applications/${app._id}`}
-                              className="group-hover:scale-105 transition-transform inline-flex items-center gap-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 rounded-xl hover:from-blue-700 hover:to-indigo-700 font-semibold shadow-md hover:shadow-lg text-sm"
+                              className="group-hover:scale-105 transition-transform inline-flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2.5 rounded-xl hover:from-purple-700 hover:to-pink-700 font-semibold shadow-md hover:shadow-lg text-sm"
                             >
-                              View
-                            </Link>
-                            <Link
-                              to={`/officer/review/${app._id}`}
-                              className="group-hover:scale-105 transition-transform inline-flex items-center gap-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2.5 rounded-xl hover:from-green-700 hover:to-emerald-700 font-semibold shadow-md hover:shadow-lg text-sm"
-                            >
-                              Review
+                              View & Review
                             </Link>
                           </div>
                         </td>

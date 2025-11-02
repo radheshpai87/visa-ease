@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['applicant', 'officer', 'admin'],
     default: 'applicant'
+  },
+  profilePicture: {
+    type: String,
+    default: null
   }
 }, { timestamps: true });
 

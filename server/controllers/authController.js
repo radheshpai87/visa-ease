@@ -193,6 +193,12 @@ export const getMe = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    console.log('getMe - User object:', {
+      id: user._id,
+      username: user.username,
+      profilePicture: user.profilePicture,
+      hasProfilePicture: !!user.profilePicture
+    });
     res.status(200).json(user);
   } catch (error) {
     console.error('Get profile error:', error);
@@ -267,25 +273,41 @@ export const changePassword = async (req, res) => {
 // Upload profile picture (placeholder - integrate with Cloudinary)
 export const uploadProfilePicture = async (req, res) => {
   try {
+    console.log('=== Upload Profile Picture ===');
+    console.log('User ID:', req.user.userId);
+    console.log('File present:', !!req.file);
+    
     if (!req.file) {
+      console.log('❌ No file uploaded');
       return res.status(400).json({ message: 'Please upload a file' });
     }
 
+    console.log('File details:');
+    console.log('- Path:', req.file.path);
+    console.log('- Filename:', req.file.filename);
+    console.log('- Original name:', req.file.originalname);
+
     const user = await User.findById(req.user.userId);
     if (!user) {
+      console.log('❌ User not found');
       return res.status(404).json({ message: 'User not found' });
     }
+
+    console.log('Current profile picture:', user.profilePicture);
 
     // Update profile picture URL (from Cloudinary)
     user.profilePicture = req.file.path; // Cloudinary URL
     await user.save();
+
+    console.log('✅ Profile picture updated to:', user.profilePicture);
+    console.log('================================\n');
 
     res.status(200).json({
       message: 'Profile picture uploaded successfully',
       profilePicture: user.profilePicture
     });
   } catch (error) {
-    console.error('Upload profile picture error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('❌ Upload profile picture error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

@@ -25,7 +25,6 @@ import ApplicantDashboard from './components/ApplicantDashboard';
 import OfficerDashboard from './components/OfficerDashboard';
 import ApplicationDetails from './components/ApplicationDetails';
 import VisaApplicationForm from './components/VisaApplicationForm';
-import OfficerReviewForm from './components/OfficerReviewForm';
 import AdminRegister from './components/AdminRegister';
 import AdminAuth from './components/AdminAuth';
 import Profile from './components/Profile';
@@ -163,13 +162,6 @@ const App = () => {
       <Route path="/applications/:id" element={
         <ProtectedRoute>
           <ApplicationDetails />
-        </ProtectedRoute>
-      } />
-
-      {/* Officer review form */}
-      <Route path="/officer/review/:id" element={
-        <ProtectedRoute allowedRoles={['officer']}>
-          <OfficerReviewForm />
         </ProtectedRoute>
       } />
 
