@@ -12,25 +12,44 @@ cloudinary.config({
 
 export const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'visa_documents',
-    format: async (req, file) => {
-      // Determine format based on the actual file mimetype
-      const mimeType = file.mimetype;
-      if (mimeType === 'application/pdf') return 'pdf';
-      if (mimeType.startsWith('image/jpeg') || mimeType.startsWith('image/jpg')) return 'jpg';
-      if (mimeType.startsWith('image/png')) return 'png';
+  params: async (req, file) => {
+    // Determine format and resource type based on the actual file mimetype
+    const mimeType = file.mimetype;
+    let format;
+    let resourceType = 'auto';
+    
+    console.log('Cloudinary upload - File mimetype:', mimeType);
+    console.log('Cloudinary upload - Original filename:', file.originalname);
+    
+    if (mimeType === 'application/pdf') {
+      format = 'pdf';
+      resourceType = 'raw'; // PDFs must be uploaded as 'raw' type
+    } else if (mimeType.startsWith('image/jpeg') || mimeType.startsWith('image/jpg')) {
+      format = 'jpg';
+      resourceType = 'image';
+    } else if (mimeType.startsWith('image/png')) {
+      format = 'png';
+      resourceType = 'image';
+    } else {
       // Default to original extension if available
-      const ext = file.originalname.split('.').pop();
-      return ext || 'pdf';
-    },
-    public_id: (req, file) => {
-      // Create a more descriptive filename
-      const timestamp = Date.now();
-      const originalName = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_');
-      return `doc-${originalName}-${timestamp}`;
-    },
-    resource_type: 'auto', // Automatically detect resource type (image, raw, video, etc.)
+      const ext = file.originalname.split('.').pop().toLowerCase();
+      format = ext;
+      resourceType = ext === 'pdf' ? 'raw' : 'auto';
+    }
+    
+    console.log('Cloudinary upload - Format:', format, 'Resource Type:', resourceType);
+    
+    // Create a more descriptive filename
+    const timestamp = Date.now();
+    const originalName = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_');
+    
+    return {
+      folder: 'visa_documents',
+      format: format,
+      public_id: `doc-${originalName}-${timestamp}`,
+      resource_type: resourceType,
+      allowed_formats: ['pdf', 'jpg', 'jpeg', 'png'],
+    };
   },
 });
 

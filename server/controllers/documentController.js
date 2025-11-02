@@ -7,24 +7,29 @@ export const uploadDocument = async (req, res) => {
   try {
     const { application_id, document_type } = req.body;
 
-    console.log('Upload request received:');
+    console.log('=== Document Upload Request ===');
     console.log('- Application ID:', application_id);
     console.log('- Document Type:', document_type);
-    console.log('- File:', req.file);
+    console.log('- File present:', !!req.file);
+    
+    if (req.file) {
+      console.log('- File details:');
+      console.log('  * Original name:', req.file.originalname);
+      console.log('  * Mimetype:', req.file.mimetype);
+      console.log('  * Size:', req.file.size, 'bytes');
+      console.log('  * Cloudinary path:', req.file.path);
+      console.log('  * Filename:', req.file.filename);
+    }
 
     if (!req.file) {
+      console.error('No file uploaded');
       return res.status(400).json({ message: 'Please upload a file' });
     }
 
     if (!application_id) {
+      console.error('No application ID provided');
       return res.status(400).json({ message: 'Application ID is required' });
     }
-
-    console.log('File uploaded to Cloudinary:');
-    console.log('- Path:', req.file.path);
-    console.log('- Filename:', req.file.filename);
-    console.log('- Original name:', req.file.originalname);
-    console.log('- Size:', req.file.size);
 
     const newDocument = new Document({
       application_id,
@@ -34,12 +39,18 @@ export const uploadDocument = async (req, res) => {
 
     const savedDocument = await newDocument.save();
     
-    console.log('Document saved to database:', savedDocument);
+    console.log('✅ Document saved successfully:', savedDocument._id);
+    console.log('================================\n');
 
     res.status(201).json(savedDocument);
   } catch (error) {
-    console.error('Error uploading document:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('❌ Error uploading document:', error);
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      message: 'Server error during file upload', 
+      error: error.message,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 
