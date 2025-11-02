@@ -3,7 +3,7 @@ import axios from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
-import { FaUser, FaPassport, FaPlane, FaUpload, FaCheckCircle, FaTimesCircle, FaFileAlt, FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { FaUser, FaPassport, FaPlane, FaUpload, FaCheckCircle, FaTimesCircle, FaFileAlt, FaTrash, FaArrowLeft, FaCalendarAlt } from 'react-icons/fa';
 
 const VisaApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -217,122 +217,158 @@ const VisaApplicationForm = () => {
   // Progress indicator
   const ProgressBar = () => (
     <div className="mb-8">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex items-center mb-6">
         {[1, 2, 3].map((step) => (
-          <div key={step} className="flex items-center flex-1">
-            <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold transition-all ${
-              currentStep >= step 
-                ? 'bg-[#be0b32] text-white shadow-lg' 
-                : 'bg-gray-200 text-gray-500'
-            }`}>
-              {currentStep > step ? <FaCheckCircle /> : step}
+          <React.Fragment key={step}>
+            <div className="flex flex-col items-center flex-1">
+              <div className={`flex items-center justify-center w-14 h-14 rounded-full font-bold transition-all shadow-lg ${
+                currentStep >= step 
+                  ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white scale-110' 
+                  : 'bg-gray-200 text-gray-500'
+              }`}>
+                {currentStep > step ? <FaCheckCircle className="text-xl" /> : <span className="text-lg">{step}</span>}
+              </div>
+              <div className={`mt-3 text-sm font-semibold text-center transition-colors ${
+                currentStep >= step 
+                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600' 
+                  : 'text-gray-500'
+              }`}>
+                {step === 1 && 'Personal Info'}
+                {step === 2 && 'Travel Details'}
+                {step === 3 && 'Documents'}
+              </div>
             </div>
             {step < 3 && (
-              <div className={`flex-1 h-1 mx-2 transition-all ${
-                currentStep > step ? 'bg-[#be0b32]' : 'bg-gray-200'
+              <div className={`h-2 w-full max-w-[150px] mx-2 rounded-full transition-all self-start mt-6 ${
+                currentStep > step ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-red-600' : 'bg-gray-200'
               }`} />
             )}
-          </div>
+          </React.Fragment>
         ))}
-      </div>
-      <div className="flex justify-between text-sm font-medium">
-        <span className={currentStep >= 1 ? 'text-[#be0b32]' : 'text-gray-500'}>Personal Info</span>
-        <span className={currentStep >= 2 ? 'text-[#be0b32]' : 'text-gray-500'}>Travel Details</span>
-        <span className={currentStep >= 3 ? 'text-[#be0b32]' : 'text-gray-500'}>Documents</span>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-red-50 py-12 px-4">
+      <div className="max-w-5xl mx-auto">
         {/* Back Button */}
         <button
           onClick={() => navigate('/applicant-dashboard')}
-          className="mb-4 flex items-center gap-2 text-gray-600 hover:text-[#be0b32] transition-colors font-medium"
+          className="mb-6 group flex items-center gap-2 text-gray-600 hover:text-purple-700 transition-all font-semibold px-4 py-2 rounded-lg hover:bg-white/50"
         >
-          <FaArrowLeft /> Back to Dashboard
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> 
+          Back to Dashboard
         </button>
         
         {/* Header */}
-        <div className="bg-white rounded-t-2xl shadow-lg p-8 border-b-4 border-[#be0b32]">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">New Visa Application</h1>
-          <p className="text-gray-600">Complete all steps to submit your application</p>
+        <div className="bg-white/80 backdrop-blur-sm rounded-t-2xl shadow-xl p-8 border-b-4 border-transparent bg-clip-padding relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 opacity-10"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-4 mb-3">
+              <div className="p-3 bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 rounded-xl shadow-lg">
+                <FaFileAlt className="text-3xl text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-600 to-red-600">
+                  New Visa Application
+                </h1>
+                <p className="text-gray-600 font-medium mt-1">Complete all steps to submit your application</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-b-2xl shadow-lg p-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-b-2xl shadow-xl p-8 border border-gray-100">
           <ProgressBar />
 
           <form onSubmit={handleSubmit}>
             {/* Step 1: Personal Information */}
             {currentStep === 1 && (
               <div className="space-y-6 animate-fadeIn">
-                <div className="flex items-center gap-3 mb-6">
-                  <FaUser className="text-3xl text-[#be0b32]" />
-                  <h2 className="text-2xl font-bold text-gray-800">Personal Information</h2>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gradient-to-r from-purple-200 to-pink-200">
+                  <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl">
+                    <FaUser className="text-3xl text-purple-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                    Personal Information
+                  </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Full Name *</label>
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-purple-600">●</span> Full Name *
+                    </label>
                     <input
                       type="text"
                       name="full_name"
                       value={formData.full_name}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all hover:border-purple-300 bg-white/50"
                       placeholder="Enter your full name"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Passport Number *</label>
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-pink-600">●</span> Passport Number *
+                    </label>
                     <input
                       type="text"
                       name="passport_number"
                       value={formData.passport_number}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all hover:border-pink-300 bg-white/50 font-mono"
                       placeholder="e.g., A12345678"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Nationality *</label>
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-purple-600">●</span> Nationality *
+                    </label>
                     <input
                       type="text"
                       name="nationality"
                       value={formData.nationality}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all hover:border-purple-300 bg-white/50"
                       placeholder="Your nationality"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Date of Birth *</label>
-                    <input
-                      type="date"
-                      name="date_of_birth"
-                      value={formData.date_of_birth}
-                      onChange={handleChange}
-                      max={new Date().toISOString().split('T')[0]}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
-                      required
-                    />
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-red-600">●</span> Date of Birth *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="date"
+                        name="date_of_birth"
+                        value={formData.date_of_birth}
+                        onChange={handleChange}
+                        max={new Date().toISOString().split('T')[0]}
+                        className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all hover:border-red-300 bg-white/50 cursor-pointer"
+                        required
+                        lang="en-IN"
+                      />
+                    </div>
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block mb-2 font-semibold text-gray-700">Address *</label>
+                  <div className="md:col-span-2 group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-pink-600">●</span> Address *
+                    </label>
                     <textarea
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all hover:border-pink-300 bg-white/50"
                       rows={3}
                       placeholder="Your complete address"
                       required
@@ -345,101 +381,128 @@ const VisaApplicationForm = () => {
             {/* Step 2: Travel Details */}
             {currentStep === 2 && (
               <div className="space-y-6 animate-fadeIn">
-                <div className="flex items-center gap-3 mb-6">
-                  <FaPlane className="text-3xl text-[#be0b32]" />
-                  <h2 className="text-2xl font-bold text-gray-800">Travel Details</h2>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gradient-to-r from-pink-200 to-red-200">
+                  <div className="p-3 bg-gradient-to-br from-pink-100 to-red-100 rounded-xl">
+                    <FaPlane className="text-3xl text-pink-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-red-600">
+                    Travel Details
+                  </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Visa Type *</label>
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-purple-600">●</span> Visa Type *
+                    </label>
                     <select
                       name="type_id"
                       value={formData.type_id}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all hover:border-purple-300 bg-white/50 font-semibold"
                       required
                     >
                       <option value="">Select Visa Type</option>
                       {visaTypes.map((type) => (
                         <option key={type._id} value={type._id}>
-                          {type.name}
+                          {type.name} - ₹{type.fee?.toLocaleString('en-IN')}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Purpose of Travel *</label>
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-pink-600">●</span> Purpose of Travel *
+                    </label>
                     <input
                       type="text"
                       name="purpose_of_travel"
                       value={formData.purpose_of_travel}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all hover:border-pink-300 bg-white/50"
                       placeholder="e.g., Tourism, Business, Study"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Intended Arrival Date *</label>
-                    <input
-                      type="date"
-                      name="intended_arrival_date"
-                      value={formData.intended_arrival_date}
-                      onChange={handleChange}
-                      min={new Date().toISOString().split('T')[0]}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
-                      required
-                    />
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-red-600">●</span> Intended Arrival Date *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="date"
+                        name="intended_arrival_date"
+                        value={formData.intended_arrival_date}
+                        onChange={handleChange}
+                        min={new Date().toISOString().split('T')[0]}
+                        className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all hover:border-red-300 bg-white/50 cursor-pointer"
+                        required
+                        lang="en-IN"
+                      />
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Intended Departure Date</label>
-                    <input
-                      type="date"
-                      name="intended_departure_date"
-                      value={formData.intended_departure_date}
-                      onChange={handleChange}
-                      min={formData.intended_arrival_date || new Date().toISOString().split('T')[0]}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
-                    />
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-purple-600">●</span> Intended Departure Date
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="date"
+                        name="intended_departure_date"
+                        value={formData.intended_departure_date}
+                        onChange={handleChange}
+                        min={formData.intended_arrival_date || new Date().toISOString().split('T')[0]}
+                        className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all hover:border-purple-300 bg-white/50 cursor-pointer"
+                        lang="en-IN"
+                      />
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Duration of Stay</label>
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-pink-600">●</span> Duration of Stay
+                    </label>
                     <input
                       type="text"
                       name="duration_of_stay"
                       value={formData.duration_of_stay}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all font-semibold text-purple-700"
                       placeholder="Auto-calculated"
                       readOnly
                     />
                   </div>
 
-                  <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Appointment Date *</label>
-                    <input
-                      type="date"
-                      name="appointment_date"
-                      value={formData.appointment_date}
-                      onChange={handleChange}
-                      min={new Date().toISOString().split('T')[0]}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
-                      required
-                    />
+                  <div className="group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-red-600">●</span> Appointment Date *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="date"
+                        name="appointment_date"
+                        value={formData.appointment_date}
+                        onChange={handleChange}
+                        min={new Date().toISOString().split('T')[0]}
+                        className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all hover:border-red-300 bg-white/50 cursor-pointer"
+                        required
+                        lang="en-IN"
+                      />
+                    </div>
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block mb-2 font-semibold text-gray-700">Additional Notes</label>
+                  <div className="md:col-span-2 group">
+                    <label className="block mb-2 font-bold text-gray-700 flex items-center gap-2">
+                      <span className="text-purple-600">●</span> Additional Notes
+                    </label>
                     <textarea
                       name="notes"
                       value={formData.notes}
                       onChange={handleChange}
-                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#be0b32] focus:border-transparent transition-all"
+                      className="w-full border-2 border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all hover:border-purple-300 bg-white/50"
                       rows={3}
                       placeholder="Any additional information..."
                     />
@@ -447,10 +510,16 @@ const VisaApplicationForm = () => {
                 </div>
 
                 {/* Eligibility Hint */}
-                <div className="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    <strong>💡 Tip:</strong> Make sure your passport is valid for at least 6 months from your intended arrival date.
-                  </p>
+                <div className="mt-6 p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-500 rounded-xl shadow-sm">
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl">💡</div>
+                    <div>
+                      <p className="text-sm font-semibold text-blue-900 mb-1">Important Reminder</p>
+                      <p className="text-sm text-blue-800">
+                        Make sure your passport is valid for at least 6 months from your intended arrival date.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -458,30 +527,40 @@ const VisaApplicationForm = () => {
             {/* Step 3: Document Upload */}
             {currentStep === 3 && (
               <div className="space-y-6 animate-fadeIn">
-                <div className="flex items-center gap-3 mb-6">
-                  <FaUpload className="text-3xl text-[#be0b32]" />
-                  <h2 className="text-2xl font-bold text-gray-800">Upload Documents</h2>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gradient-to-r from-purple-200 to-red-200">
+                  <div className="p-3 bg-gradient-to-br from-red-100 to-pink-100 rounded-xl">
+                    <FaUpload className="text-3xl text-red-600" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-600">
+                    Upload Documents
+                  </h2>
                 </div>
 
                 {/* Dropzone */}
                 <div
                   {...getRootProps()}
-                  className={`border-3 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${
+                  className={`border-3 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 ${
                     isDragActive 
-                      ? 'border-[#be0b32] bg-red-50' 
-                      : 'border-gray-300 hover:border-[#be0b32] hover:bg-gray-50'
+                      ? 'border-purple-600 bg-gradient-to-br from-purple-50 to-pink-50 shadow-lg scale-105' 
+                      : 'border-gray-300 hover:border-purple-400 hover:bg-gradient-to-br hover:from-purple-50/50 hover:to-pink-50/50 hover:shadow-md'
                   }`}
                 >
                   <input {...getInputProps()} />
-                  <FaUpload className="text-6xl text-gray-400 mx-auto mb-4" />
+                  <div className={`transition-all duration-300 ${isDragActive ? 'scale-110' : ''}`}>
+                    <div className="inline-block p-5 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full mb-4">
+                      <FaUpload className={`text-5xl ${isDragActive ? 'text-purple-600' : 'text-gray-400'}`} />
+                    </div>
+                  </div>
                   {isDragActive ? (
-                    <p className="text-lg font-semibold text-[#be0b32]">Drop files here...</p>
+                    <p className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                      Drop files here...
+                    </p>
                   ) : (
                     <>
-                      <p className="text-lg font-semibold text-gray-700 mb-2">
+                      <p className="text-lg font-bold text-gray-700 mb-2">
                         Drag & drop files here, or click to select
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 font-medium">
                         Supported formats: JPG, PNG, PDF (max 5MB per file)
                       </p>
                     </>
@@ -491,19 +570,24 @@ const VisaApplicationForm = () => {
                 {/* Uploaded Files List */}
                 {uploadedFiles.length > 0 && (
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold text-gray-700">Uploaded Files ({uploadedFiles.length})</h3>
-                      <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                    <div className="flex items-center justify-between mb-4 bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                      <h3 className="font-bold text-gray-700 flex items-center gap-2">
+                        <FaCheckCircle className="text-green-600" />
+                        Uploaded Files ({uploadedFiles.length})
+                      </h3>
+                      <span className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full text-sm font-bold shadow-md">
                         ✓ Ready to Submit
                       </span>
                     </div>
                     {uploadedFiles.map((fileObj, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3 flex-1">
-                          <FaFileAlt className="text-2xl text-[#be0b32]" />
+                      <div key={index} className="group flex items-center justify-between p-5 bg-gradient-to-r from-white to-purple-50 rounded-xl border-2 border-purple-200 hover:shadow-lg hover:border-purple-400 transition-all duration-300">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl group-hover:scale-110 transition-transform">
+                            <FaFileAlt className="text-2xl text-purple-600" />
+                          </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-gray-800 truncate">{fileObj.name}</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="font-bold text-gray-800 truncate">{fileObj.name}</p>
+                            <p className="text-sm text-gray-600 font-medium mt-1">
                               {(fileObj.size / 1024).toFixed(2)} KB
                             </p>
                           </div>
@@ -511,9 +595,10 @@ const VisaApplicationForm = () => {
                         <button
                           type="button"
                           onClick={() => removeFile(index)}
-                          className="ml-4 p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                          className="ml-4 p-3 text-red-600 hover:bg-red-100 rounded-xl transition-all hover:scale-110 group-hover:shadow-md"
+                          title="Remove file"
                         >
-                          <FaTrash />
+                          <FaTrash className="text-lg" />
                         </button>
                       </div>
                     ))}
@@ -521,61 +606,88 @@ const VisaApplicationForm = () => {
                 )}
 
                 {/* Document Requirements */}
-                <div className="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg">
-                  <h4 className="font-semibold text-yellow-800 mb-2">📋 Required Documents:</h4>
-                  <ul className="text-sm text-yellow-700 space-y-1 list-disc list-inside">
-                    <li>Valid passport (bio-data page)</li>
-                    <li>Recent passport-size photograph</li>
-                    <li>Proof of accommodation (if applicable)</li>
-                    <li>Travel itinerary (if applicable)</li>
-                  </ul>
+                <div className="mt-6 p-5 bg-gradient-to-r from-yellow-50 to-amber-50 border-l-4 border-yellow-500 rounded-xl shadow-sm">
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl">📋</div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-yellow-900 mb-3">Required Documents:</h4>
+                      <ul className="text-sm text-yellow-800 space-y-2">
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block w-2 h-2 bg-yellow-600 rounded-full"></span>
+                          <span className="font-medium">Valid passport (bio-data page)</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block w-2 h-2 bg-yellow-600 rounded-full"></span>
+                          <span className="font-medium">Recent passport-size photograph</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block w-2 h-2 bg-yellow-600 rounded-full"></span>
+                          <span className="font-medium">Proof of accommodation (if applicable)</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block w-2 h-2 bg-yellow-600 rounded-full"></span>
+                          <span className="font-medium">Travel itinerary (if applicable)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
                 {uploadedFiles.length === 0 && (
-                  <div className="text-center p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
-                    <p className="text-sm text-red-800">
-                      <strong>⚠️ Required:</strong> You must upload at least one document to submit the application. Please upload the required documents listed above.
-                    </p>
+                  <div className="text-center p-5 bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 rounded-xl shadow-sm">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="text-3xl">⚠️</div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold text-red-900 mb-1">Document Upload Required</p>
+                        <p className="text-sm text-red-800">
+                          You must upload at least one document to submit the application. Please upload the required documents listed above.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8 pt-6 border-t-2 border-gray-200">
+            <div className="flex justify-between mt-10 pt-6 border-t-2 border-gray-200">
               <button
                 type="button"
                 onClick={currentStep === 1 ? () => navigate('/applicant-dashboard') : prevStep}
-                className="px-8 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors flex items-center gap-2"
+                className="group px-8 py-4 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all shadow-md hover:shadow-lg flex items-center gap-2 hover:scale-105 duration-300"
               >
-                ← {currentStep === 1 ? 'Cancel' : 'Previous'}
+                <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                {currentStep === 1 ? 'Cancel' : 'Previous'}
               </button>
 
               {currentStep < 3 ? (
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="px-8 py-3 bg-[#be0b32] text-white rounded-lg font-semibold hover:bg-[#8c0826] transition-colors flex items-center gap-2"
+                  className="group px-8 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white rounded-xl font-bold hover:shadow-xl transition-all shadow-lg flex items-center gap-2 hover:scale-105 duration-300"
                 >
-                  Next →
+                  Next Step
+                  <FaPlane className="group-hover:translate-x-1 transition-transform" />
                 </button>
               ) : (
                 <button
                   type="submit"
                   disabled={loading || uploading || uploadedFiles.length === 0}
-                  className="px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold hover:shadow-xl transition-all shadow-lg flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 hover:scale-105 duration-300"
                   title={uploadedFiles.length === 0 ? 'Please upload at least one document' : ''}
                 >
                   {loading ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                      Submitting...
+                      Submitting Application...
                     </>
                   ) : (
                     <>
-                      <FaCheckCircle />
-                      Submit Application
-                      {uploadedFiles.length === 0 && ' (Upload Documents First)'}
+                      <FaCheckCircle className="text-xl group-hover:scale-110 transition-transform" />
+                      <span>
+                        Submit Application
+                        {uploadedFiles.length === 0 && ' (Upload Required)'}
+                      </span>
                     </>
                   )}
                 </button>

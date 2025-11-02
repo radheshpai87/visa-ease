@@ -100,8 +100,8 @@ const OfficerDashboard = () => {
       'Nationality': app.applicant_id?.nationality || '-',
       'Visa Type': app.type_id?.name || '-',
       'Status': app.status_id?.name || '-',
-      'Application Date': new Date(app.application_date).toLocaleDateString(),
-      'Appointment Date': app.appointment_date ? new Date(app.appointment_date).toLocaleDateString() : '-',
+      'Application Date': new Date(app.application_date).toLocaleDateString('en-IN'),
+      'Appointment Date': app.appointment_date ? new Date(app.appointment_date).toLocaleDateString('en-IN') : '-',
       'Notes': app.notes || '-'
     }));
 
@@ -367,9 +367,9 @@ const OfficerDashboard = () => {
                         <td className="px-6 py-5">
                           <div className="text-sm font-medium text-gray-900">
                             {app.application_date ? new Date(app.application_date).toLocaleDateString('en-IN', { 
-                              year: 'numeric', 
-                              month: 'short', 
-                              day: 'numeric' 
+                              day: '2-digit',
+                              month: '2-digit', 
+                              year: 'numeric'
                             }) : '-'}
                           </div>
                           <div className="text-xs text-gray-500">
@@ -383,9 +383,9 @@ const OfficerDashboard = () => {
                         <td className="px-6 py-5">
                           <div className="text-sm font-medium text-gray-900">
                             {app.appointment_date ? new Date(app.appointment_date).toLocaleDateString('en-IN', { 
-                              year: 'numeric', 
-                              month: 'short', 
-                              day: 'numeric' 
+                              day: '2-digit',
+                              month: '2-digit', 
+                              year: 'numeric'
                             }) : (
                               <span className="text-gray-400">Not scheduled</span>
                             )}

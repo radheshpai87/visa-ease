@@ -199,17 +199,17 @@ const ApplicationHistory = () => {
 
     const csvData = filteredApplications.map((app) => ({
       'Application ID': app._id,
-      'Application Date': new Date(app.application_date).toLocaleDateString(),
+      'Application Date': new Date(app.application_date).toLocaleDateString('en-IN'),
       'Full Name': app.full_name,
       'Passport Number': app.passport_number,
       'Nationality': app.nationality,
       'Visa Type': app.visa_type?.name || 'N/A',
       'Purpose': app.purpose_of_travel,
       'Arrival Date': app.intended_arrival_date
-        ? new Date(app.intended_arrival_date).toLocaleDateString()
+        ? new Date(app.intended_arrival_date).toLocaleDateString('en-IN')
         : 'N/A',
       'Departure Date': app.intended_departure_date
-        ? new Date(app.intended_departure_date).toLocaleDateString()
+        ? new Date(app.intended_departure_date).toLocaleDateString('en-IN')
         : 'N/A',
       'Duration (days)': app.duration_of_stay || 'N/A',
       Status: app.status?.status_name || 'N/A',
@@ -275,7 +275,7 @@ const ApplicationHistory = () => {
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-IN', { month: 'short', day: '2-digit', year: 'numeric' });
+    return date.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
   const activeFilterCount =
@@ -387,12 +387,15 @@ const ApplicationHistory = () => {
                     <FaCalendarAlt className="inline mr-1" />
                     Start Date
                   </label>
-                  <input
-                    type="date"
-                    value={filters.startDate}
-                    onChange={(e) => handleFilterChange('startDate', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#be0b32] focus:border-transparent"
-                  />
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={filters.startDate}
+                      onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#be0b32] focus:border-transparent"
+                      lang="en-IN"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -400,12 +403,15 @@ const ApplicationHistory = () => {
                     <FaCalendarAlt className="inline mr-1" />
                     End Date
                   </label>
-                  <input
-                    type="date"
-                    value={filters.endDate}
-                    onChange={(e) => handleFilterChange('endDate', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#be0b32] focus:border-transparent"
-                  />
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={filters.endDate}
+                      onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#be0b32] focus:border-transparent"
+                      lang="en-IN"
+                    />
+                  </div>
                 </div>
 
                 {/* Visa Type */}

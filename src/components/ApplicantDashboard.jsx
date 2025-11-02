@@ -351,9 +351,9 @@ const ApplicantDashboard = () => {
                       <td className="px-6 py-5 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
                           {new Date(app.application_date).toLocaleDateString('en-IN', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric' 
+                            day: '2-digit',
+                            month: '2-digit', 
+                            year: 'numeric'
                           })}
                         </div>
                         <div className="text-xs text-gray-500">
@@ -372,9 +372,9 @@ const ApplicantDashboard = () => {
                       <td className="px-6 py-5 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
                           {app.appointment_date ? new Date(app.appointment_date).toLocaleDateString('en-IN', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric' 
+                            day: '2-digit',
+                            month: '2-digit', 
+                            year: 'numeric'
                           }) : (
                             <span className="text-gray-400">Not scheduled</span>
                           )}
