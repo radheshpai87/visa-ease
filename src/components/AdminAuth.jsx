@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaUserShield, FaEye, FaEyeSlash, FaLock, FaEnvelope, FaUser, FaPhone, FaKey } from 'react-icons/fa';
+import { FaUserShield, FaEye, FaEyeSlash, FaLock, FaEnvelope, FaUser, FaPhone, FaKey, FaHome } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from '../api/axios';
@@ -151,7 +151,16 @@ const AdminAuth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-4xl">
+      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-4xl relative">
+        {/* Home Button - Top Right Corner */}
+        <button
+          onClick={() => navigate('/')}
+          className="absolute top-4 right-4 z-10 text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-gray-100"
+          title="Go to Homepage"
+        >
+          <FaHome className="w-6 h-6" />
+        </button>
+        
         {/* Header */}
         <div className="bg-gradient-to-r from-red-600 via-red-700 to-purple-700 p-8 text-white">
           <div className="flex items-center justify-center gap-3 mb-3">

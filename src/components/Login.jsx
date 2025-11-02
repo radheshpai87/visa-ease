@@ -126,17 +126,7 @@ const Login = () => {
 
   return (
     <AuthBackground>
-      <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row relative mt-16">
-        {/* Home Button - Top center above the card */}
-        <button
-          onClick={() => navigate('/')}
-          className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-red-600 px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 text-sm font-medium border border-gray-200"
-          title="Go to Homepage"
-        >
-          <FaHome className="w-5 h-5" />
-          <span>Back to Home</span>
-        </button>
-        
+      <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row relative">
         {/* Left Side */}
         <div className="bg-blue-900 text-white p-8 md:w-2/5 flex flex-col justify-between relative">
           <div>
@@ -158,6 +148,15 @@ const Login = () => {
         </div>
         {/* Right Side */}
         <div className="p-8 md:w-3/5 relative">
+          {/* Home Button - Top Right Corner */}
+          <button
+            onClick={() => navigate('/')}
+            className="absolute top-4 right-4 text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-gray-100"
+            title="Go to Homepage"
+          >
+            <FaHome className="w-6 h-6" />
+          </button>
+          
           <div className="flex justify-between items-center mb-8">
             <h3 className="text-2xl font-bold text-gray-800">
               {formType === 'login' ? 'Welcome Back' : 'Create Account'}
