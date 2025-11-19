@@ -14,8 +14,7 @@ const applicantSchema = new mongoose.Schema({
     type: String,
     required: false,
     unique: true,
-    sparse: true, // Allow multiple documents with null/undefined passport_number
-    default: null
+    sparse: true // Do NOT set a default of null — leaving it undefined when not provided
   },
   nationality: {
     type: String,
