@@ -2,18 +2,29 @@ import User from '../models/User.js';
 import Applicant from '../models/Applicant.js';
 import Officer from '../models/Officer.js';
 import jwt from 'jsonwebtoken';
+import validator from 'validator';
 
 // Register a new user
 export const register = async (req, res) => {
   try {
-    const { username, email, password, phone, role, full_name, passport_number, nationality, address, department } = req.body;
+    let { username, email, password, phone, role, full_name, passport_number, nationality, address, department } = req.body;
+
+    // Trim inputs
+    username = username?.trim();
+    email = email?.trim().toLowerCase();
+    phone = phone?.trim();
+
+    // Validate email format
+    if (!email || !validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
+    }
 
     // Don't allow admin registration through public endpoint
     if (role === 'admin') {
       return res.status(403).json({ message: 'Admin registration not allowed through this endpoint' });
     }
 
-    // Check if user already exists
+    // Check if user already exists (use normalized email)
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
@@ -38,7 +49,10 @@ export const register = async (req, res) => {
       };
       
       // Only add these fields if they have actual values
-      if (passport_number) applicantData.passport_number = passport_number;
+      if (passport_number) {
+        const pn = String(passport_number).trim();
+        if (pn) applicantData.passport_number = pn;
+      }
       if (nationality) applicantData.nationality = nationality;
       if (address) applicantData.address = address;
       
@@ -84,7 +98,14 @@ export const register = async (req, res) => {
 // Admin registration (separate, protected endpoint)
 export const registerAdmin = async (req, res) => {
   try {
-    const { username, email, password, phone, adminSecretKey } = req.body;
+    let { username, email, password, phone, adminSecretKey } = req.body;
+    username = username?.trim();
+    email = email?.trim().toLowerCase();
+    phone = phone?.trim();
+
+    if (!email || !validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
+    }
 
     // Debug logging
     console.log('Received adminSecretKey:', adminSecretKey);
